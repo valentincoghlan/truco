@@ -290,7 +290,7 @@ wss.on('connection', (ws) => {
       if (d.status !== 'lobby' || mine === null) return;
       delete d.seats[mine];
     } else if (m.t === 'size') {
-      if (d.status !== 'lobby' || mine === null || (m.n !== 2 && m.n !== 4)) return;
+      if (d.status !== 'lobby' || (m.n !== 2 && m.n !== 4)) return;
       d.size = m.n;
       /* al pasar a mano a mano, los sentados en 2 y 3 se mueven a los lugares libres (si no hay, quedan parados) */
       for (const s of [2, 3]) {
@@ -300,7 +300,7 @@ wss.on('connection', (ws) => {
         delete d.seats[s];
       }
     } else if (m.t === 'target') {
-      if (d.status !== 'lobby' || mine === null || (m.n !== 15 && m.n !== 30)) return;
+      if (d.status !== 'lobby' || (m.n !== 15 && m.n !== 30)) return;
       d.target = m.n;
     } else if (m.t === 'start') {
       if (d.status !== 'lobby' || mine === null || Object.keys(d.seats).length < d.size) return;

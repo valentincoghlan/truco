@@ -284,7 +284,7 @@ function entryHTML(){
   '</div>';
 }
 function lobbyHTML(d){
-  var n=Object.keys(d.seats).length,h=header(),two=d.size===2,off=mine===null?'disabled':'';
+  var n=Object.keys(d.seats).length,h=header(),two=d.size===2;
   function slot(s){
     var p=d.seats[s];
     if(p) return '<div class="slot"><b>'+esc(p.name)+(s===mine?' (vos)':'')+'</b>'+(s===mine?btn('stand','Levantarme','ghost small'):'')+'</div>';
@@ -292,10 +292,10 @@ function lobbyHTML(d){
   }
   h+='<h2 class="disp" style="font-size:26px;margin-top:6px">Armando la mesa</h2>';
   h+='<p class="hint">'+(two?'Compartí el código '+esc(code)+' con tu rival.':'Compartí el código '+esc(code)+' con los otros tres. Los compañeros van en la misma pareja.')+'</p>';
-  h+='<div class="tg"><span>Jugadores</span>'+btn('size:2','2','small '+(two?'on':''),off)+btn('size:4','4','small '+(!two?'on':''),off)+'</div>';
+  h+='<div class="tg"><span>Jugadores</span>'+btn('size:2','2','small '+(two?'on':''))+btn('size:4','4','small '+(!two?'on':''))+'</div>';
   if(two) h+='<div class="pairs"><div class="pair"><h2 class="disp">Jugador A</h2>'+slot(0)+'</div><div class="pair"><h2 class="disp">Jugador B</h2>'+slot(1)+'</div></div>';
   else h+='<div class="pairs"><div class="pair"><h2 class="disp">Pareja A</h2>'+slot(0)+slot(2)+'</div><div class="pair"><h2 class="disp">Pareja B</h2>'+slot(1)+slot(3)+'</div></div>';
-  h+='<div class="tg"><span>Se juega a</span>'+btn('target:15','15','small '+(d.target===15?'on':''),mine===null?'disabled':'')+btn('target:30','30','small '+(d.target===30?'on':''),mine===null?'disabled':'')+'<span>puntos</span></div>';
+  h+='<div class="tg"><span>Se juega a</span>'+btn('target:15','15','small '+(d.target===15?'on':''))+btn('target:30','30','small '+(d.target===30?'on':''))+'<span>puntos</span></div>';
   h+=btn('start',n<d.size?'Faltan '+(d.size-n)+' para empezar':'Empezar','primary',(n<d.size||mine===null)?'disabled':'');
   return h;
 }
