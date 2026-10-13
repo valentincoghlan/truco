@@ -1,0 +1,9 @@
+{
+  "name": "truco",
+  "version": "1.0.0",
+  "description": "Truco argentino para 4 jugadores en vivo",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" },
+  "dependencies": { "ws": "^8.18.0" }
+}

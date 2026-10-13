@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Truco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f1ebdd; --ink:#1e1a13; --muted:#6f6755; --panel:#fbf6e9; --line:#d8cdb5;
+  --stick:#8a5a22; --accent:#c8442f; --gold:#e0a93a; --felt:#1d5a43; --rim:#5a3a1d;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15120d; --ink:#f2ead7; --muted:#a69c86; --panel:#201c14; --line:#3a3326; --stick:#e0b36a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15120d; --ink:#f2ead7; --muted:#a69c86; --panel:#201c14; --line:#3a3326; --stick:#e0b36a;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;min-height:100vh}
+.disp{font-family:'Alfa Slab One',Georgia,'Times New Roman',serif;font-weight:400}
+.wrap{max-width:520px;margin:0 auto;padding:12px 12px 28px}
+.wrap.busy{pointer-events:none}
+.wrap.busy .btn,.wrap.busy .hand .card{opacity:.6}
+h1,h2,p{margin:0}
+.msg{padding:28px 0;text-align:center;color:var(--muted)}
+
+/* botones */
+.btn{font:inherit;font-weight:800;border:2px solid var(--ink);background:transparent;color:var(--ink);border-radius:12px;padding:10px 14px;min-height:46px;cursor:pointer}
+.btn:focus-visible,.card.can:focus-visible,.link:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn.primary{background:var(--ink);color:var(--bg)}
+.btn.accent{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{border-color:var(--line);font-weight:600}
+.btn[disabled]{opacity:.4;cursor:default}
+.btn.small{min-height:36px;padding:6px 10px;font-size:14px}
+.link{font:inherit;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:6px}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btns .btn{flex:1 1 auto}
+
+/* entrada */
+.entry{padding-top:28px;display:grid;gap:14px}
+.logo{font-size:64px;line-height:1;letter-spacing:.5px}
+.entry p{color:var(--muted)}
+label{display:grid;gap:6px;font-weight:600;font-size:14px}
+input{font:inherit;font-size:18px;padding:11px 12px;border-radius:12px;border:2px solid var(--line);background:var(--panel);color:var(--ink);width:100%}
+.row{display:flex;gap:8px}
+.row input{text-transform:uppercase;letter-spacing:4px;font-weight:800;text-align:center}
+.sep{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px}
+.sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* encabezado */
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.code{font-size:22px;letter-spacing:3px}
+.top .l{display:flex;align-items:center;gap:8px}
+
+/* lobby */
+.pairs{display:grid;gap:10px;margin:14px 0}
+.pair{border:2px solid var(--line);border-radius:16px;padding:12px;background:var(--panel)}
+.pair h2{font-size:18px;margin-bottom:8px}
+.slot{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px dashed var(--line)}
+.slot:first-of-type{border-top:0}
+.slot b{font-weight:800}
+.slot .empty{color:var(--muted)}
+.hint{color:var(--muted);font-size:14px}
+.tg{display:flex;gap:8px;align-items:center;margin:6px 0 14px}
+.tg .btn.on{background:var(--ink);color:var(--bg)}
+
+/* marcador de fósforos */
+.score{background:var(--panel);border:2px solid var(--line);border-radius:16px;padding:8px 12px;display:grid;gap:4px;margin-bottom:10px}
+.srow{display:grid;grid-template-columns:78px 1fr 34px;align-items:center;gap:8px}
+.srow .who{font-weight:800;font-size:14px}
+.srow .n{font-family:'Alfa Slab One',Georgia,serif;font-size:22px;text-align:right}
+.sticks{display:flex;flex-wrap:wrap;gap:4px}
+.grp line{stroke:var(--stick);stroke-width:3;stroke-linecap:round}
+.grp line.off{opacity:.16}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding-top:2px}
+
+/* mesa */
+.table{background:var(--felt);border:8px solid var(--rim);border-radius:24px;padding:12px 8px;display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:6px;color:#f4ecd6}
+.seat{display:flex;flex-direction:column;align-items:center;gap:5px;min-height:76px}
+.seat.top{grid-column:1/4}
+.seat.left{grid-column:1;grid-row:2}
+.seat.right{grid-column:3;grid-row:2}
+.seat.bottom{grid-column:1/4;grid-row:3}
+.mid{grid-column:2;grid-row:2;display:flex;align-items:center;justify-content:center;text-align:center;min-height:90px}
+.plate{max-width:100%;padding:3px 10px;border-radius:999px;font-weight:800;font-size:14px;border:2px solid transparent;background:#0f3b2c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plate.us{border-color:var(--gold)}
+.plate.them{border-color:#e0705b}
+.plate em{font-style:normal;font-weight:600;font-size:11px;opacity:.8;margin-left:4px}
+.seat.turn .plate{background:#f4ecd6;color:#1b1710}
+.backs{display:flex;gap:3px;min-height:14px}
+.backs i{display:block;width:12px;height:18px;border-radius:3px;border:1.5px solid #f4ecd6;background:repeating-linear-gradient(45deg,#7a1f1a 0 4px,#5b1511 4px 8px)}
+.played{display:flex;min-height:66px}
+.played .card+.card{margin-left:-26px}
+
+/* cartas */
+.card{--w:88px;width:var(--w);height:calc(var(--w)*1.5);border-radius:calc(var(--w)*.09);background:#fbf3df;border:2px solid #2b2417;position:relative;flex:none;font-family:'Alfa Slab One',Georgia,serif;color:#222}
+.card.sE{color:#2b4f9e}.card.sB{color:#2f6f3d}.card.sO{color:#c98a12}.card.sC{color:#b8322b}
+.card .cn{position:absolute;left:9%;top:5%;font-size:calc(var(--w)*.24);line-height:1}
+.card .cn.b{left:auto;right:9%;top:auto;bottom:5%;transform:rotate(180deg)}
+.card .cs{position:absolute;left:50%;top:50%;width:54%;height:54%;transform:translate(-50%,-50%)}
+.card.sm{--w:44px;border-width:1.5px}
+.hand{display:flex;justify-content:center;gap:10px;margin:14px 0 10px}
+.hand .card{cursor:default;opacity:.55}
+.hand .card.can{cursor:pointer;opacity:1;border-color:#111}
+.hand .card.can:active{transform:translateY(-4px)}
+.cardbtn{background:none;border:0;padding:0}
+
+/* cantos y estado */
+.shout{padding:6px 4px}
+.shout small{display:block;font-size:13px;opacity:.85}
+.shout b{font-family:'Alfa Slab One',Georgia,serif;font-weight:400;font-size:26px;line-height:1.05;display:block}
+.shout.pop{animation:pop .35s ease-out}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.shout.pop{animation:none}}
+.status{margin:10px 0 0;font-weight:800;text-align:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
+.chip{font-size:13px;padding:3px 10px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel)}
+.chip.gold{border-color:var(--gold)}
+.panel{margin-top:12px;border:2px solid var(--ink);border-radius:16px;padding:12px;display:grid;gap:10px;background:var(--panel)}
+.panel .q{font-size:17px}
+.panel .q b.disp{font-weight:400;font-size:20px}
+.wait{margin-top:12px;text-align:center;color:var(--muted)}
+.over{margin-top:12px;border:2px solid var(--gold);border-radius:16px;padding:14px;text-align:center;display:grid;gap:10px;background:var(--panel)}
+.over .disp{font-size:24px;line-height:1.1}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;max-width:90vw;z-index:10}
+.ro{margin:10px 0;padding:8px 12px;border-radius:12px;background:var(--panel);border:1.5px dashed var(--line);font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="sE" viewBox="0 0 24 24"><path d="M12 1.5l2.6 4v10.5H9.4V5.5z" fill="currentColor"/><rect x="5.5" y="16" width="13" height="2.4" rx="1.2" fill="currentColor"/><rect x="10.8" y="18.4" width="2.4" height="3.6" fill="currentColor"/><circle cx="12" cy="22.6" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="sB" viewBox="0 0 24 24"><path d="M9 22.5L10 10C6.5 9 6 4 9.5 3C11 2 13 2 14.5 3C18 4 17.5 9 14 10L15 22.5Z" fill="currentColor"/></symbol>
+  <symbol id="sO" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="currentColor"/><circle cx="12" cy="12" r="6.3" fill="none" stroke="#fbf3df" stroke-width="1.6"/><circle cx="12" cy="12" r="2" fill="#fbf3df"/></symbol>
+  <symbol id="sC" viewBox="0 0 24 24"><path d="M4.5 2.5h15c.2 6.2-2.6 9.6-6.3 10.6V18h3.6v3.5H7.2V18h3.6v-4.9C7.1 12.1 4.3 8.7 4.5 2.5z" fill="currentColor"/></symbol>
+</svg>
+<div id="app"></div>
+<script>
+(function(){
+'use strict';
+var app=document.getElementById('app');
+var POINTS=[1,2,3,4];
+var TRUCO=['','Truco','Retruco','Vale cuatro'];
+var ENV={E:'Envido',R:'Real envido',F:'Falta envido'};
+
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function lsDel(k){try{localStorage.removeItem(k)}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+
+var uid=lsGet('truco.uid');
+if(!uid){uid='u'+Math.random().toString(36).slice(2)+Date.now().toString(36)+Math.random().toString(36).slice(2);lsSet('truco.uid',uid)}
+var name=lsGet('truco.name')||'';
+var ws=null,connected=false,retry=0;
+var code=null,st=undefined,mine=null;
+var toast='',toastT=null,mazoArmed=false,mazoT=null,shownKey=null,codeInput='';
+
+/* ---------- conexión ---------- */
+function send(o){
+  if(ws&&ws.readyState===1){ws.send(JSON.stringify(o));return true}
+  toast='Sin conexión con el servidor…';render();return false;
+}
+function hello(){send({t:'hello',uid:uid,name:name.trim()})}
+function connect(){
+  ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host);
+  ws.onopen=function(){
+    connected=true;retry=0;
+    hello();
+    var c=code||lsGet('truco.code');
+    if(c&&name.trim()) send({t:'join',code:c});
+    render();
+  };
+  ws.onmessage=function(ev){
+    var m;try{m=JSON.parse(ev.data)}catch(e){return}
+    if(m.t==='state'){code=m.code;lsSet('truco.code',code);st=m.d;mine=m.mine;render()}
+    else if(m.t==='err'){
+      toast=m.m;
+      if(m.gone){code=null;st=undefined;mine=null;lsDel('truco.code')}
+      render();
+    }
+  };
+  ws.onclose=function(){connected=false;retry++;render();setTimeout(connect,Math.min(5000,600*retry))};
+  ws.onerror=function(){};
+}
+
+/* ---------- reglas visibles (solo para mostrar botones) ---------- */
+function canTruco(r,seat){return r.trucoLvl<3&&(r.trucoRight===-1||r.trucoRight===seat%2)}
+function envOK(r){return r.bazas.length===0&&!r.envidoDone&&r.trucoLvl===0}
+function envNext(calls){
+  if(!calls.length) return ['E','R','F'];
+  var last=calls[calls.length-1],ne=calls.filter(function(k){return k==='E'}).length;
+  if(last==='E') return ne<2?['E','R','F']:['R','F'];
+  if(last==='R') return ['F'];
+  return [];
+}
+function nm(d,s){return d.seats[s]?d.seats[s].name:'?'}
+function teamName(d,t){return nm(d,t)+' y '+nm(d,t+2)}
+
+/* ---------- acciones ---------- */
+function needName(){
+  toast='Poné tu nombre primero';render();
+  var i=document.getElementById('nm');if(i)i.focus();
+}
+function handle(a){
+  if(a==='create'){
+    if(!name.trim()) return needName();
+    lsSet('truco.name',name.trim());hello();return send({t:'create'});
+  }
+  if(a==='join'){
+    if(!name.trim()) return needName();
+    var c=(codeInput||'').trim();
+    if(c.length<4){toast='El código tiene 4 letras o números';return render()}
+    lsSet('truco.name',name.trim());hello();return send({t:'join',code:c});
+  }
+  if(a==='exit'){code=null;st=undefined;mine=null;lsDel('truco.code');
+    // salir de la mesa en el servidor: reconectar limpio
+    if(ws){ws.onclose=null;ws.close()}
+    connected=false;render();connect();return}
+  if(a==='copy'){
+    try{navigator.clipboard.writeText(code).then(function(){toast='Código copiado';render()},function(){toast='Código: '+code;render()})}
+    catch(e){toast='Código: '+code;render()}
+    return;
+  }
+  if(a.indexOf('sit:')===0){
+    if(!name.trim()) return needName();
+    hello();return send({t:'sit',s:+a.slice(4)});
+  }
+  if(a==='stand') return send({t:'stand'});
+  if(a==='start') return send({t:'start'});
+  if(a.indexOf('target:')===0) return send({t:'target',n:+a.slice(7)});
+  if(a==='mazo'){
+    if(!mazoArmed){mazoArmed=true;clearTimeout(mazoT);mazoT=setTimeout(function(){mazoArmed=false;render()},3000);return render()}
+    mazoArmed=false;return send({t:'act',a:'mazo'});
+  }
+  send({t:'act',a:a});
+}
+app.addEventListener('click',function(e){
+  var el=e.target.closest('[data-a]');
+  if(!el||el.hasAttribute('disabled')) return;
+  handle(el.getAttribute('data-a'));
+});
+app.addEventListener('input',function(e){
+  if(e.target.id==='nm') name=e.target.value;
+  if(e.target.id==='cd') codeInput=e.target.value.toUpperCase();
+});
+
+/* ---------- vistas ---------- */
+function btn(a,label,cls,extra){return '<button class="btn '+(cls||'')+'" data-a="'+a+'" '+(extra||'')+'>'+label+'</button>'}
+function cardHTML(c,cls,attrs){
+  var n=parseInt(c,10),s=c.slice(-1);
+  return '<div class="card s'+s+' '+(cls||'')+'" '+(attrs||'')+'><span class="cn">'+n+'</span><svg class="cs" viewBox="0 0 24 24"><use href="#s'+s+'"/></svg><span class="cn b">'+n+'</span></div>';
+}
+function sticks(n,groups){
+  var segs=[[4,4,24,4],[24,4,24,24],[24,24,4,24],[4,24,4,4],[4,24,24,4]],out='';
+  for(var g=0;g<groups;g++){
+    var k=Math.max(0,Math.min(5,n-g*5));
+    out+='<svg class="grp" viewBox="0 0 28 28" width="28" height="28" aria-hidden="true">'+segs.map(function(s,i){
+      return '<line class="'+(i<k?'on':'off')+'" x1="'+s[0]+'" y1="'+s[1]+'" x2="'+s[2]+'" y2="'+s[3]+'"/>';
+    }).join('')+'</svg>';
+  }
+  return out;
+}
+function header(){
+  return '<div class="top"><div class="l"><span class="disp code">'+esc(code||'')+'</span>'+(code?btn('copy','Copiar código','ghost small'):'')+'</div><div>'+btn('exit','Salir','ghost small')+'</div></div>';
+}
+function entryHTML(){
+  return '<div class="entry"><h1 class="disp logo">Truco</h1>'+
+  '<p>Cuatro jugadores, de a dos, cada uno desde su celu.</p>'+
+  '<label>Tu nombre<input id="nm" maxlength="14" autocomplete="nickname" value="'+esc(name)+'" placeholder="Ej: Valen"></label>'+
+  btn('create','Crear mesa','primary')+
+  '<div class="sep">o entrá a una mesa</div>'+
+  '<div class="row"><input id="cd" maxlength="4" placeholder="CÓDIGO" value="'+esc(codeInput)+'" aria-label="Código de mesa">'+btn('join','Entrar','')+'</div>'+
+  '</div>';
+}
+function lobbyHTML(d){
+  var n=Object.keys(d.seats).length,h=header();
+  function slot(s){
+    var p=d.seats[s];
+    if(p) return '<div class="slot"><b>'+esc(p.name)+(s===mine?' (vos)':'')+'</b>'+(s===mine?btn('stand','Levantarme','ghost small'):'')+'</div>';
+    return '<div class="slot"><span class="empty">Libre</span>'+btn('sit:'+s,'Sentarme','small')+'</div>';
+  }
+  h+='<h2 class="disp" style="font-size:26px;margin-top:6px">Armando la mesa</h2>';
+  h+='<p class="hint">Compartí el código '+esc(code)+' con los otros tres. Los compañeros van en la misma pareja.</p>';
+  h+='<div class="pairs"><div class="pair"><h2 class="disp">Pareja A</h2>'+slot(0)+slot(2)+'</div><div class="pair"><h2 class="disp">Pareja B</h2>'+slot(1)+slot(3)+'</div></div>';
+  h+='<div class="tg"><span>Se juega a</span>'+btn('target:15','15','small '+(d.target===15?'on':''),mine===null?'disabled':'')+btn('target:30','30','small '+(d.target===30?'on':''),mine===null?'disabled':'')+'<span>puntos</span></div>';
+  h+=btn('start',n<4?'Faltan '+(4-n)+' para empezar':'Empezar','primary',(n<4||mine===null)?'disabled':'');
+  return h;
+}
+function scoreHTML(d,myT){
+  var groups=d.target/5;
+  function row(t){
+    var label=t===myT?'Nosotros':'Ellos';
+    if(mine===null) label=t===0?'Pareja A':'Pareja B';
+    return '<div class="srow"><span class="who">'+label+'</span><div class="sticks">'+sticks(d.score[t],groups)+'</div><span class="n">'+d.score[t]+'</span></div>';
+  }
+  var r=d.round,lvl=r&&!r.over?POINTS[r.trucoLvl]:null;
+  return '<div class="score">'+row(myT)+row(1-myT)+'<div class="meta"><span>A '+d.target+'</span><span>'+(lvl?'La mano vale '+lvl+(r.trucoLvl?' · '+TRUCO[r.trucoLvl]:''):'')+'</span></div></div>';
+}
+function seatHTML(d,s,pos,myT){
+  var r=d.round,p=d.seats[s];
+  var turn=!r.over&&!r.ask&&r.turn===s&&d.status==='playing';
+  var cls=(s%2===myT)?'us':'them',backs='';
+  if(pos!=='bottom'){for(var i=0;i<r.hands[s].length;i++) backs+='<i></i>'}
+  return '<div class="seat '+pos+(turn?' turn':'')+'"><div class="plate '+cls+'">'+esc(p.name)+(r.mano===s?'<em>mano</em>':'')+(p.on===false?'<em>sin conexión</em>':'')+'</div>'+
+    (pos!=='bottom'?'<div class="backs">'+backs+'</div>':'')+
+    '<div class="played">'+r.played[s].map(function(c){return cardHTML(c,'sm')}).join('')+'</div></div>';
+}
+function statusText(d){
+  var r=d.round;
+  if(d.status==='finished') return 'Partida terminada';
+  if(r.over) return 'Terminó la mano';
+  if(r.ask){
+    var rt=1-r.ask.by%2;
+    if(mine!==null) return mine%2===rt?'Tenés que responder':'Esperando a '+teamName(d,rt);
+    return 'Esperando respuesta';
+  }
+  if(mine!==null&&r.turn===mine) return 'Te toca jugar';
+  return 'Juega '+nm(d,r.turn);
+}
+function askLabel(a){
+  if(a.kind==='truco') return '¡'+TRUCO[a.lvl]+'!';
+  return a.calls.map(function(k){return ENV[k]}).join(', ');
+}
+function actionsHTML(d){
+  var r=d.round;
+  if(mine===null||d.status!=='playing'||r.over) return '';
+  var myT=mine%2,h='';
+  if(r.ask){
+    var a=r.ask,rt=1-a.by%2;
+    if(myT!==rt) return '<div class="wait">Esperando respuesta…</div>';
+    h='<div class="panel"><div class="q"><b>'+esc(nm(d,a.by))+'</b> cantó <b class="disp">'+esc(askLabel(a))+'</b></div><div class="btns">'+btn('quiero','Quiero','primary')+btn('no','No quiero','');
+    if(a.kind==='truco'){
+      if(a.lvl<3) h+=btn('up','¡'+TRUCO[a.lvl+1]+'!','accent');
+      if(a.lvl===1&&envOK(r)) envNext([]).forEach(function(k){h+=btn('env:'+k,ENV[k],'accent')});
+    }else{
+      envNext(a.calls).forEach(function(k){h+=btn('env:'+k,ENV[k],'accent')});
+    }
+    return h+'</div></div>';
+  }
+  if(r.turn!==mine) return '';
+  h='<div class="btns" style="margin-top:12px">';
+  if(canTruco(r,mine)) h+=btn('truco','¡'+TRUCO[r.trucoLvl+1]+'!','accent');
+  if(envOK(r)) envNext([]).forEach(function(k){h+=btn('call:'+k,ENV[k],'')});
+  h+=btn('mazo',mazoArmed?'¿Seguro? Tocá de nuevo':'Al mazo','ghost');
+  return h+'</div>';
+}
+function gameHTML(d){
+  var r=d.round,myT=mine===null?0:mine%2,base=mine===null?0:mine;
+  var h=header();
+  h+=scoreHTML(d,myT);
+  var pos={bottom:base%4,right:(base+1)%4,top:(base+2)%4,left:(base+3)%4};
+  var last=null;
+  for(var i=(d.log||[]).length-1;i>=0;i--){if(d.log[i].s>=0){last=d.log[i];break}}
+  var shout='';
+  if(last){
+    var pop=last.k!==shownKey;shownKey=last.k;
+    shout='<div class="shout'+(pop?' pop':'')+'"><small>'+esc(nm(d,last.s))+'</small><b>'+esc(last.t)+'</b></div>';
+  }
+  h+='<div class="table">'+seatHTML(d,pos.top,'top',myT)+seatHTML(d,pos.left,'left',myT)+'<div class="mid">'+shout+'</div>'+seatHTML(d,pos.right,'right',myT)+seatHTML(d,pos.bottom,'bottom',myT)+'</div>';
+  h+='<p class="status">'+statusText(d)+'</p>';
+  var chips='';
+  if(r.bazas.length){
+    chips+=r.bazas.map(function(w,i){return '<span class="chip">Baza '+(i+1)+': '+(w===-1?'parda':(mine===null?(w===0?'Pareja A':'Pareja B'):(w===myT?'nuestra':'de ellos')))+'</span>'}).join('');
+  }
+  if(r.envidoRes){
+    var er=r.envidoRes,t;
+    if(er.q){
+      var us=mine===null?er.e[0]:er.e[myT],them=mine===null?er.e[1]:er.e[1-myT];
+      t='Envido '+us+' a '+them;
+    }else t='Envido no querido';
+    chips+='<span class="chip gold">'+t+' · +'+er.pts+'</span>';
+  }
+  if(chips) h+='<div class="chips">'+chips+'</div>';
+  if(d.status==='finished'){
+    var wn=d.winner,ws2=mine===null?teamName(d,wn):(wn===myT?'¡Ganamos!':'Ganaron ellos');
+    h+='<div class="over"><div class="disp">'+esc(ws2)+'</div><p class="hint">'+esc(teamName(d,wn))+'</p>'+(mine!==null?btn('rematch','Revancha','primary'):'')+'</div>';
+  }else if(r.over){
+    var who=mine===null?teamName(d,r.over.team):(r.over.team===myT?'Nosotros':'Ellos');
+    h+='<div class="over"><div class="disp">'+esc(who)+' +'+r.over.pts+'</div><p class="hint">'+esc(r.over.t)+'</p>'+(mine!==null?btn('next','Repartir la siguiente','primary'):'')+'</div>';
+  }
+  h+=actionsHTML(d);
+  if(mine!==null&&d.status==='playing'){
+    var can=!r.over&&!r.ask&&r.turn===mine;
+    h+='<div class="hand">'+r.hands[mine].map(function(c){
+      return can?'<button class="cardbtn" data-a="play:'+c+'" aria-label="Jugar '+parseInt(c,10)+'">'+cardHTML(c,'can')+'</button>':cardHTML(c,'');
+    }).join('')+'</div>';
+  }
+  if(mine===null) h+='<p class="hint" style="text-align:center;margin-top:12px">Estás mirando la partida.</p>';
+  return h;
+}
+function render(){
+  var h;
+  if(!connected) h=(code?header():'')+'<p class="msg">Conectando con el servidor…<br><small>Si recién se despertó, puede tardar hasta un minuto.</small></p>';
+  else if(!code||st===undefined) h=entryHTML();
+  else if(st.status==='lobby') h=lobbyHTML(st);
+  else h=gameHTML(st);
+  app.innerHTML='<div class="wrap">'+h+'</div>'+(toast?'<div class="toast" role="status">'+esc(toast)+'</div>':'');
+  if(toast){clearTimeout(toastT);toastT=setTimeout(function(){toast='';var t=document.querySelector('.toast');if(t)t.remove()},3200)}
+}
+render();connect();
+})();
+
+</script>
+</body>
+</html>
