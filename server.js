@@ -224,7 +224,7 @@ function view(room, uid) {
   const d = JSON.parse(JSON.stringify(room.d));
   const mine = mySeatOf(room.d, uid);
   const online = new Set([...room.clients].map((c) => c.uid));
-  for (const s of Object.keys(d.seats)) d.seats[s] = { name: d.seats[s].name, on: online.has(room.d.seats[s].uid) };
+  for (const s of Object.keys(d.seats)) d.seats[s] = { name: d.seats[s].name, av: d.seats[s].av || '', on: online.has(room.d.seats[s].uid) };
   if (d.round) {
     delete d.round.init;
     for (let s = 0; s < d.size; s++) if (s !== mine) d.round.hands[s] = d.round.hands[s].map(() => 0);
@@ -235,6 +235,16 @@ function view(room, uid) {
 const INDEX = fs.readFileSync(path.join(__dirname, 'public', 'index.html'));
 const server = http.createServer((req, res) => {
   if (req.url === '/healthz') { res.writeHead(200); res.end('ok'); return; }
+  /* fotos de los jugadores de la delegación: solo nombres simples, sin rutas */
+  const foto = /^\/fotos\/([a-z-]{2,24})\.jpg$/.exec(req.url);
+  if (foto) {
+    fs.readFile(path.join(__dirname, 'public', 'fotos', foto[1] + '.jpg'), (err, buf) => {
+      if (err) { res.writeHead(404); res.end('No encontrado'); return; }
+      res.writeHead(200, { 'Content-Type': 'image/jpeg', 'Cache-Control': 'public, max-age=86400' });
+      res.end(buf);
+    });
+    return;
+  }
   if (req.url === '/' || req.url.startsWith('/?')) {
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
     res.end(INDEX); return;
@@ -264,7 +274,11 @@ wss.on('connection', (ws) => {
   ws.on('message', (raw) => {
     let m; try { m = JSON.parse(raw); } catch (e) { return; }
     if (!m || typeof m.t !== 'string') return;
-    if (m.t === 'hello') { ws.uid = clean(m.uid, 60); ws.name = clean(m.name, 14); return; }
+    if (m.t === 'hello') {
+      ws.uid = clean(m.uid, 60); ws.name = clean(m.name, 24);
+      ws.av = typeof m.av === 'string' && /^[a-z-]{2,24}$/.test(m.av) ? m.av : '';
+      return;
+    }
     if (!ws.uid) return fail(ws, 'Recargá la página');
     if (m.t === 'create') {
       if (rooms.size >= 1000) return fail(ws, 'Hay demasiadas mesas abiertas, probá más tarde');
@@ -285,7 +299,7 @@ wss.on('connection', (ws) => {
       if (!ws.name) return fail(ws, 'Poné tu nombre primero');
       if (d.seats[s] && d.seats[s].uid !== ws.uid) return fail(ws, 'Ese lugar ya está ocupado');
       if (mine !== null) delete d.seats[mine];
-      d.seats[s] = { uid: ws.uid, name: ws.name };
+      d.seats[s] = { uid: ws.uid, name: ws.name, av: ws.av };
     } else if (m.t === 'stand') {
       if (d.status !== 'lobby' || mine === null) return;
       delete d.seats[mine];

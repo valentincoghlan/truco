@@ -49,6 +49,19 @@ h1,h2,p{margin:0}
 .brand.big svg{width:230px}
 .brand.small{margin-bottom:10px}
 .brand.small svg{width:120px}
+.pick h2{font-size:18px}
+.people{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 6px}
+.person{font:inherit;background:none;border:2px solid transparent;border-radius:14px;padding:6px 2px;color:var(--ink);cursor:pointer;display:grid;justify-items:center;gap:4px;font-size:12px;font-weight:600;line-height:1.15;text-align:center}
+.person.on{border-color:var(--accent);background:var(--panel)}
+.person:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.av{border-radius:50%;object-fit:cover;flex:none;background:var(--panel);display:inline-grid;place-items:center;font-weight:800;color:var(--ink);border:2px solid #fff;overflow:hidden}
+.me{display:flex;align-items:center;gap:12px;padding:10px 12px;border:2px solid var(--line);border-radius:16px;background:var(--panel)}
+.me b{display:block;font-size:18px}
+.me .link{margin-left:auto}
+.slot .who{display:flex;align-items:center;gap:8px;min-width:0}
+.plate{display:inline-flex;align-items:center;gap:6px}
+.plate .av{border-width:1.5px}
+.shout .av{margin-bottom:4px}
 .ed{font-size:22px;line-height:1.1;color:var(--red)!important;margin-top:6px}
 label{display:grid;gap:6px;font-weight:600;font-size:14px}
 input{font:inherit;font-size:18px;padding:11px 12px;border-radius:12px;border:2px solid var(--line);background:var(--panel);color:var(--ink);width:100%}
@@ -164,6 +177,18 @@ function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&am
 var uid=lsGet('truco.uid');
 if(!uid){uid='u'+Math.random().toString(36).slice(2)+Date.now().toString(36)+Math.random().toString(36).slice(2);lsSet('truco.uid',uid)}
 var name=lsGet('truco.name')||'';
+var av=lsGet('truco.av')||'';
+/* delegación Edición Alemania 2026 (Bios de la Cámara): id = foto en /fotos/<id>.jpg; un 1 al final = sin foto */
+var PEOPLE=[
+  ['acevedo','Rafael Acevedo'],['buxdorf','Mariano Buxdorf'],['coghlan','Valentín Coghlan'],['depascual','Gabriel Depascual'],
+  ['gaido','Marcos Gaido'],['donemberg','Nadir Donemberg'],['elizalde','Facundo Elizalde'],['axel-garcia','Axel García Giménez'],
+  ['ignacio-garcia','Ignacio García Giménez'],['giaquinta','Leandro Giaquinta'],['heinecke','Socorro Heinecke'],['humphreys','Roy Humphreys'],
+  ['clarisa-lohning','Clarisa Löhning'],['pablo-lohning','Pablo Löhning'],['malca','Rigoberto Malca La Rosa'],['mandolesi','Juan Ignacio Mandolesi'],
+  ['mangupli','Walter Mangupli',1],['rodriguez','Esteban Rodríguez'],['schuartzman','Sebastián Schuartzman'],['stegmann','Ezequiel Stegmann'],
+  ['villamea','Maximiliano Villamea'],['yovino','Hugo Yovino']
+];
+function person(id){for(var i=0;i<PEOPLE.length;i++) if(PEOPLE[i][0]===id) return PEOPLE[i];return null}
+var picking=!name;
 var ws=null,connected=false,retry=0;
 var code=null,st=undefined,mine=null;
 var toast='',toastT=null,mazoArmed=false,mazoT=null,shownKey=null,codeInput='';
@@ -173,7 +198,7 @@ function send(o){
   if(ws&&ws.readyState===1){ws.send(JSON.stringify(o));return true}
   toast='Sin conexión con el servidor…';render();return false;
 }
-function hello(){send({t:'hello',uid:uid,name:name.trim()})}
+function hello(){send({t:'hello',uid:uid,name:name.trim(),av:av})}
 function connect(){
   ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host);
   ws.onopen=function(){
@@ -217,6 +242,11 @@ function needName(){
   var i=document.getElementById('nm');if(i)i.focus();
 }
 function handle(a){
+  if(a.indexOf('pick:')===0){
+    var p=person(a.slice(5));if(!p) return;
+    av=p[0];name=p[1];lsSet('truco.av',av);lsSet('truco.name',name);picking=false;hello();return render();
+  }
+  if(a==='repick'){picking=true;return render()}
   if(a==='create'){
     if(!name.trim()) return needName();
     lsSet('truco.name',name.trim());hello();return send({t:'create'});
@@ -256,7 +286,7 @@ app.addEventListener('click',function(e){
   handle(el.getAttribute('data-a'));
 });
 app.addEventListener('input',function(e){
-  if(e.target.id==='nm') name=e.target.value;
+  if(e.target.id==='nm'){name=e.target.value;if(av){av='';lsDel('truco.av')}}
   if(e.target.id==='cd') codeInput=e.target.value.toUpperCase();
 });
 
@@ -296,11 +326,28 @@ var LOGO='<svg viewBox="0 0 400.23 143.14" role="img" aria-label="Cámara Insurt
 function header(){
   return '<span class="brand small">'+LOGO+'</span><div class="top"><div class="l"><span class="disp code">'+esc(code||'')+'</span>'+(code?btn('copy','Copiar código','ghost small'):'')+'</div><div>'+btn('exit','Salir','ghost small')+'</div></div>';
 }
+/* foto si la persona tiene, si no iniciales */
+function avatar(id,nameTxt,size){
+  var p=person(id),st='width:'+size+'px;height:'+size+'px;font-size:'+Math.round(size*.38)+'px';
+  if(p&&!p[2]) return '<img class="av" src="/fotos/'+p[0]+'.jpg" alt="" width="'+size+'" height="'+size+'" style="'+st+'" loading="lazy">';
+  var ini=String(nameTxt||'?').trim().split(/\s+/).slice(0,2).map(function(w){return w.charAt(0)}).join('').toUpperCase();
+  return '<span class="av" style="'+st+'" aria-hidden="true">'+esc(ini)+'</span>';
+}
+function pickerHTML(){
+  if(!picking&&name.trim()){
+    return '<div class="me">'+avatar(av,name,48)+'<div><small class="hint">Jugás como</small><b>'+esc(name)+'</b></div><button class="link" data-a="repick">Cambiar</button></div>';
+  }
+  return '<div class="pick"><h2 class="disp">Elegí tu jugador</h2></div>'+
+    '<div class="people">'+PEOPLE.map(function(p){
+      return '<button class="person'+(p[0]===av?' on':'')+'" data-a="pick:'+p[0]+'" aria-pressed="'+(p[0]===av)+'">'+avatar(p[0],p[1],56)+'<span>'+esc(p[1])+'</span></button>';
+    }).join('')+'</div>'+
+    '<label>O escribí tu nombre<input id="nm" maxlength="24" autocomplete="nickname" value="'+esc(av?'':name)+'" placeholder="Ej: Valen"></label>';
+}
 function entryHTML(){
   return '<div class="entry"><span class="brand big">'+LOGO+'</span>'+
   '<div><h1 class="disp logo">Truco</h1><p class="disp ed">Edición Alemania 2026</p></div>'+
   '<p>Mano a mano o de a cuatro en parejas, cada uno desde su celu.</p>'+
-  '<label>Tu nombre<input id="nm" maxlength="14" autocomplete="nickname" value="'+esc(name)+'" placeholder="Ej: Valen"></label>'+
+  pickerHTML()+
   btn('create','Crear mesa','primary')+
   '<div class="sep">o entrá a una mesa</div>'+
   '<div class="row"><input id="cd" maxlength="4" placeholder="CÓDIGO" value="'+esc(codeInput)+'" aria-label="Código de mesa">'+btn('join','Entrar','')+'</div>'+
@@ -310,7 +357,7 @@ function lobbyHTML(d){
   var n=Object.keys(d.seats).length,h=header(),two=d.size===2;
   function slot(s){
     var p=d.seats[s];
-    if(p) return '<div class="slot"><b>'+esc(p.name)+(s===mine?' (vos)':'')+'</b>'+(s===mine?btn('stand','Levantarme','ghost small'):'')+'</div>';
+    if(p) return '<div class="slot"><span class="who">'+avatar(p.av,p.name,32)+'<b>'+esc(p.name)+(s===mine?' (vos)':'')+'</b></span>'+(s===mine?btn('stand','Levantarme','ghost small'):'')+'</div>';
     return '<div class="slot"><span class="empty">Libre</span>'+btn('sit:'+s,'Sentarme','small')+'</div>';
   }
   h+='<h2 class="disp" style="font-size:26px;margin-top:6px">Armando la mesa</h2>';
@@ -337,7 +384,7 @@ function seatHTML(d,s,pos,myT){
   var turn=!r.over&&!r.ask&&r.turn===s&&d.status==='playing';
   var cls=(s%2===myT)?'us':'them',backs='';
   if(pos!=='bottom'){for(var i=0;i<r.hands[s].length;i++) backs+='<i></i>'}
-  return '<div class="seat '+pos+(turn?' turn':'')+'"><div class="plate '+cls+'">'+esc(p.name)+(r.mano===s?'<em>mano</em>':'')+(p.on===false?'<em>sin conexión</em>':'')+'</div>'+
+  return '<div class="seat '+pos+(turn?' turn':'')+'"><div class="plate '+cls+'">'+avatar(p.av,p.name,22)+'<span>'+esc(p.name)+'</span>'+(r.mano===s?'<em>mano</em>':'')+(p.on===false?'<em>sin conexión</em>':'')+'</div>'+
     (pos!=='bottom'?'<div class="backs">'+backs+'</div>':'')+
     '<div class="played">'+r.played[s].map(function(c){return cardHTML(c,'sm')}).join('')+'</div></div>';
 }
@@ -390,7 +437,8 @@ function gameHTML(d){
   var shout='';
   if(last){
     var pop=last.k!==shownKey;shownKey=last.k;
-    shout='<div class="shout'+(pop?' pop':'')+'"><small>'+esc(nm(d,last.s))+'</small><b>'+esc(last.t)+'</b></div>';
+    var sp=d.seats[last.s]||{};
+    shout='<div class="shout'+(pop?' pop':'')+'">'+avatar(sp.av,sp.name,36)+'<small>'+esc(nm(d,last.s))+'</small><b>'+esc(last.t)+'</b></div>';
   }
   var side=function(p){return pos[p]===undefined?'':seatHTML(d,pos[p],p,myT)};
   h+='<div class="table">'+side('top')+side('left')+'<div class="mid">'+shout+'</div>'+side('right')+side('bottom')+'</div>';
