@@ -104,9 +104,9 @@ input{font:inherit;font-size:18px;padding:11px 12px;border-radius:12px;border:2p
 /* cartas */
 .card{--w:88px;width:var(--w);height:calc(var(--w)*1.5);border-radius:calc(var(--w)*.09);background:#fbf3df;border:2px solid #2b2417;position:relative;flex:none;font-family:'Alfa Slab One',Georgia,serif;color:#222}
 .card.sE{color:#2b4f9e}.card.sB{color:#2f6f3d}.card.sO{color:#c98a12}.card.sC{color:#b8322b}
-.card .cn{position:absolute;left:9%;top:5%;font-size:calc(var(--w)*.24);line-height:1}
-.card .cn.b{left:auto;right:9%;top:auto;bottom:5%;transform:rotate(180deg)}
-.card .cs{position:absolute;left:50%;top:50%;width:54%;height:54%;transform:translate(-50%,-50%)}
+.card .cf{position:absolute;inset:0;width:100%;height:100%}
+.card .ct{font-family:'Alfa Slab One',Georgia,serif;font-size:13px;fill:currentColor}
+.card.sm .ct{font-size:16px}
 .card.sm{--w:44px;border-width:1.5px}
 .hand{display:flex;justify-content:center;gap:10px;margin:14px 0 10px}
 .hand .card{cursor:default;opacity:.55}
@@ -137,10 +137,13 @@ input{font:inherit;font-size:18px;padding:11px 12px;border-radius:12px;border:2p
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="sE" viewBox="0 0 24 24"><path d="M12 1.5l2.6 4v10.5H9.4V5.5z" fill="currentColor"/><rect x="5.5" y="16" width="13" height="2.4" rx="1.2" fill="currentColor"/><rect x="10.8" y="18.4" width="2.4" height="3.6" fill="currentColor"/><circle cx="12" cy="22.6" r="1.4" fill="currentColor"/></symbol>
-  <symbol id="sB" viewBox="0 0 24 24"><path d="M9 22.5L10 10C6.5 9 6 4 9.5 3C11 2 13 2 14.5 3C18 4 17.5 9 14 10L15 22.5Z" fill="currentColor"/></symbol>
-  <symbol id="sO" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="currentColor"/><circle cx="12" cy="12" r="6.3" fill="none" stroke="#fbf3df" stroke-width="1.6"/><circle cx="12" cy="12" r="2" fill="#fbf3df"/></symbol>
-  <symbol id="sC" viewBox="0 0 24 24"><path d="M4.5 2.5h15c.2 6.2-2.6 9.6-6.3 10.6V18h3.6v3.5H7.2V18h3.6v-4.9C7.1 12.1 4.3 8.7 4.5 2.5z" fill="currentColor"/></symbol>
+  <symbol id="pO" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.6" fill="#e9b23a" stroke="#8a5a0e" stroke-width="1.3"/><circle cx="12" cy="12" r="7" fill="#f6d06b" stroke="#a8740c" stroke-width="1"/><circle cx="12" cy="12" r="3.2" fill="#c8442f" stroke="#8a5a0e" stroke-width=".8"/></symbol>
+  <symbol id="pC" viewBox="0 0 24 24"><path d="M5 4h14c0 5.8-2.8 9.2-7 9.8C7.8 13.2 5 9.8 5 4z" fill="#c8322b" stroke="#6b1a14" stroke-width=".9"/><rect x="4.2" y="2.2" width="15.6" height="2.6" rx="1.3" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".7"/><rect x="10.8" y="13.4" width="2.4" height="4.6" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".6"/><ellipse cx="12" cy="15.4" rx="2.4" ry="1.3" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".6"/><path d="M6.6 22.2c0-2.4 2.4-3.8 5.4-3.8s5.4 1.4 5.4 3.8z" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".7"/></symbol>
+  <symbol id="pE" viewBox="0 0 24 48"><path d="M12 1L15.2 6.5V32.5H8.8V6.5z" fill="#4a7fd0" stroke="#1f3f78" stroke-width=".9"/><line x1="12" y1="6" x2="12" y2="31" stroke="#cfe0fa" stroke-width=".9"/><rect x="4.5" y="32.2" width="15" height="3.2" rx="1.6" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".8"/><rect x="10.4" y="35.4" width="3.2" height="8" fill="#c8442f" stroke="#6b1a14" stroke-width=".7"/><circle cx="12" cy="45" r="2.6" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".8"/></symbol>
+  <symbol id="pB" viewBox="0 0 24 48"><path d="M9.4 46.5L7 12C6.4 2.5 17.6 2.5 17 12L14.6 46.5z" fill="#5a9a44" stroke="#2a5222" stroke-width="1"/><path d="M10 46.5L8.2 12C8 8 9.5 5.5 11 5" fill="none" stroke="#8cc46a" stroke-width="1"/><ellipse cx="9" cy="16" rx="1.6" ry="1.1" fill="#8a5a22"/><ellipse cx="15" cy="22" rx="1.6" ry="1.1" fill="#8a5a22"/><ellipse cx="9.6" cy="29" rx="1.4" ry="1" fill="#8a5a22"/><ellipse cx="14.4" cy="36" rx="1.4" ry="1" fill="#8a5a22"/><rect x="9.4" y="41" width="5.2" height="2" rx="1" fill="#c8442f"/></symbol>
+  <symbol id="f10" viewBox="0 0 40 60"><rect x="14" y="46" width="4" height="12" rx="1" fill="#3a2a1a"/><rect x="22" y="46" width="4" height="12" rx="1" fill="#3a2a1a"/><path d="M11 22h18l3 26H8z" fill="currentColor" stroke="#1e1a13" stroke-width=".9"/><rect x="10.6" y="33" width="18.8" height="2.4" fill="#e9b23a"/><path d="M29 24l6 9" stroke="#f2c9a0" stroke-width="3.2" stroke-linecap="round"/><path d="M11 24l-3 12" stroke="#f2c9a0" stroke-width="3.2" stroke-linecap="round"/><circle cx="20" cy="15" r="5.2" fill="#f2c9a0" stroke="#1e1a13" stroke-width=".9"/><path d="M13.5 13.5c1-6.5 12-6.5 13 0z" fill="#c8442f" stroke="#1e1a13" stroke-width=".8"/><path d="M25 9c4-4 7-3 8-1" fill="none" stroke="#e9b23a" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="f11" viewBox="0 0 40 60"><ellipse cx="18" cy="43" rx="14" ry="7.5" fill="#8a5a22" stroke="#1e1a13" stroke-width=".9"/><rect x="7" y="47" width="3.2" height="11" rx="1" fill="#6b4318"/><rect x="12.5" y="48" width="3.2" height="10" rx="1" fill="#6b4318"/><rect x="21" y="48" width="3.2" height="10" rx="1" fill="#6b4318"/><rect x="26.5" y="47" width="3.2" height="11" rx="1" fill="#6b4318"/><path d="M27 41c2-6 4-10 8-12l3 4c-2 1-3 3-4 5l-2 6z" fill="#8a5a22" stroke="#1e1a13" stroke-width=".9"/><path d="M5 40c-3 2-4 6-3 9" fill="none" stroke="#3a2a1a" stroke-width="2.2" stroke-linecap="round"/><path d="M13 23h11l1 15H12z" fill="currentColor" stroke="#1e1a13" stroke-width=".9"/><path d="M24 25l6-6" stroke="#f2c9a0" stroke-width="3" stroke-linecap="round"/><circle cx="18.5" cy="18" r="4.4" fill="#f2c9a0" stroke="#1e1a13" stroke-width=".9"/><path d="M13.5 16.5c.8-5.5 9.2-5.5 10 0z" fill="#e9b23a" stroke="#1e1a13" stroke-width=".8"/></symbol>
+  <symbol id="f12" viewBox="0 0 40 60"><path d="M9 25h22l4 33H5z" fill="currentColor" stroke="#1e1a13" stroke-width=".9"/><path d="M9.5 25h21l.6 4H8.9z" fill="#fbf3df" stroke="#1e1a13" stroke-width=".6"/><circle cx="13" cy="27" r=".7" fill="#1e1a13"/><circle cx="20" cy="27" r=".7" fill="#1e1a13"/><circle cx="27" cy="27" r=".7" fill="#1e1a13"/><rect x="19" y="29" width="2" height="29" fill="#e9b23a" opacity=".8"/><path d="M30 31l4 8" stroke="#f2c9a0" stroke-width="3.2" stroke-linecap="round"/><circle cx="20" cy="16" r="5.6" fill="#f2c9a0" stroke="#1e1a13" stroke-width=".9"/><path d="M14.6 17.5c0 6 2.6 8 5.4 8s5.4-2 5.4-8c-1.6 2-3.4 2.6-5.4 2.6s-3.8-.6-5.4-2.6z" fill="#9a8f80" stroke="#1e1a13" stroke-width=".7"/><path d="M13.6 11.2l1.2-6 3 3.4L20 3.6l2.2 5 3-3.4 1.2 6z" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".8"/></symbol>
 </svg>
 <div id="app"></div>
 <script>
@@ -257,9 +260,25 @@ app.addEventListener('input',function(e){
 
 /* ---------- vistas ---------- */
 function btn(a,label,cls,extra){return '<button class="btn '+(cls||'')+'" data-a="'+a+'" '+(extra||'')+'>'+label+'</button>'}
+/* carta en un SVG de 60x90: pintas acomodadas como en la baraja española, figuras para 10, 11 y 12 */
+var PALO={E:'espadas',B:'bastos',O:'oros',C:'copas'};
+var LAY={1:[[30,46]],2:[[30,26],[30,64]],3:[[30,20],[30,45],[30,70]],4:[[21,27],[39,27],[21,63],[39,63]],
+  5:[[21,24],[39,24],[30,45],[21,66],[39,66]],6:[[21,22],[39,22],[21,45],[39,45],[21,68],[39,68]],
+  7:[[21,20],[39,20],[30,33],[21,47],[39,47],[21,70],[39,70]]};
+var ROUND={1:30,2:22,3:19,4:18,5:15,6:15,7:13};
+var TALL={1:[24,50],2:[17,34],3:[13,25],4:[15,31],5:[11,21],6:[11,21],7:[9,15]};
+var FIGPIP={10:[44,44,12],11:[46,30,12],12:[45,49,12]};
+function pip(s,x,y,w,h){return '<use href="#p'+s+'" x="'+(x-w/2)+'" y="'+(y-h/2)+'" width="'+w+'" height="'+h+'"/>'}
 function cardHTML(c,cls,attrs){
-  var n=parseInt(c,10),s=c.slice(-1);
-  return '<div class="card s'+s+' '+(cls||'')+'" '+(attrs||'')+'><span class="cn">'+n+'</span><svg class="cs" viewBox="0 0 24 24"><use href="#s'+s+'"/></svg><span class="cn b">'+n+'</span></div>';
+  var n=parseInt(c,10),s=c.slice(-1),tall=s==='E'||s==='B',g='';
+  if(n>=10){
+    var f=FIGPIP[n],fw=tall?f[2]*.75:f[2],fh=tall?f[2]*1.7:f[2];
+    g='<use href="#f'+n+'" x="10" y="17" width="38" height="57"/>'+pip(s,f[0],f[1],fw,fh);
+  }else{
+    LAY[n].forEach(function(p){g+=tall?pip(s,p[0],p[1],TALL[n][0],TALL[n][1]):pip(s,p[0],p[1],ROUND[n],ROUND[n])});
+  }
+  var num='<text class="ct" x="4" y="13">'+n+'</text><text class="ct" x="4" y="13" transform="rotate(180 30 45)">'+n+'</text>';
+  return '<div class="card s'+s+' '+(cls||'')+'" '+(attrs||'')+'><svg class="cf" viewBox="0 0 60 90" aria-hidden="true">'+g+num+'</svg></div>';
 }
 function sticks(n,groups){
   var segs=[[4,4,24,4],[24,4,24,24],[24,24,4,24],[4,24,4,4],[4,24,24,4]],out='';
@@ -396,7 +415,7 @@ function gameHTML(d){
   if(mine!==null&&d.status==='playing'){
     var can=!r.over&&!r.ask&&r.turn===mine;
     h+='<div class="hand">'+r.hands[mine].map(function(c){
-      return can?'<button class="cardbtn" data-a="play:'+c+'" aria-label="Jugar '+parseInt(c,10)+'">'+cardHTML(c,'can')+'</button>':cardHTML(c,'');
+      return can?'<button class="cardbtn" data-a="play:'+c+'" aria-label="Jugar '+parseInt(c,10)+' de '+PALO[c.slice(-1)]+'">'+cardHTML(c,'can')+'</button>':cardHTML(c,'');
     }).join('')+'</div>';
   }
   if(mine===null) h+='<p class="hint" style="text-align:center;margin-top:12px">Estás mirando la partida.</p>';
