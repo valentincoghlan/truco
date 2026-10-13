@@ -6,28 +6,22 @@
 <title>Truco · Edición Alemania 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
-  /* edición Alemania 2026: negro, rojo y oro */
-  --bg:#f3f1ec; --ink:#141414; --muted:#5f5b53; --panel:#fbfaf7; --line:#d9d4c9;
-  --stick:#141414; --accent:#d40000; --gold:#ffcc00; --felt:#1d5a43; --rim:#141414; --focus:#141414; --red:#c00000;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0f0f0f; --ink:#f3f0e8; --muted:#a8a296; --panel:#1b1b1b; --line:#343330; --stick:#ffcc00; --rim:#000; --focus:#ffcc00; --red:#ff5a4f;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0f0f0f; --ink:#f3f0e8; --muted:#a8a296; --panel:#1b1b1b; --line:#343330; --stick:#ffcc00; --rim:#000; --focus:#ffcc00; --red:#ff5a4f;
+  /* Cámara Insurtech Argentina: azul oscuro y blanco; celestes #0cb7f2 y #0979b0, gris #c6ccd8 */
+  color-scheme:dark;
+  --bg:#0b2340; --ink:#ffffff; --muted:#b9c6d8; --panel:#12305a; --line:#2a4d7c;
+  --stick:#ffffff; --accent:#0cb7f2; --gold:#0cb7f2; --felt:#0979b0; --rim:#071a30; --focus:#0cb7f2; --red:#0cb7f2;
+  --plate:#0b2340; --them:#c6ccd8;
 }
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:inherit}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;min-height:100vh}
-.disp{font-family:'Alfa Slab One',Georgia,'Times New Roman',serif;font-weight:400}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;min-height:100vh}
+.disp{font-family:'Archivo Black',Georgia,'Times New Roman',serif;font-weight:400}
 .wrap{max-width:520px;margin:0 auto;padding:12px 12px 28px}
 .wrap.busy{pointer-events:none}
 .wrap.busy .btn,.wrap.busy .hand .card{opacity:.6}
@@ -38,7 +32,7 @@ h1,h2,p{margin:0}
 .btn{font:inherit;font-weight:800;border:2px solid var(--ink);background:transparent;color:var(--ink);border-radius:12px;padding:10px 14px;min-height:46px;cursor:pointer}
 .btn:focus-visible,.card.can:focus-visible,.link:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .btn.primary{background:var(--ink);color:var(--bg)}
-.btn.accent{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.accent{background:var(--accent);border-color:var(--accent);color:#0b2340}
 .btn.ghost{border-color:var(--line);font-weight:600}
 .btn[disabled]{opacity:.4;cursor:default}
 .btn.small{min-height:36px;padding:6px 10px;font-size:14px}
@@ -50,9 +44,11 @@ h1,h2,p{margin:0}
 .entry{padding-top:28px;display:grid;gap:14px}
 .logo{font-size:64px;line-height:1;letter-spacing:.5px}
 .entry p{color:var(--muted)}
-.flag{height:8px;border-radius:999px;background:linear-gradient(90deg,#000 0 33.34%,#dd0000 33.34% 66.67%,#ffcc00 66.67%);box-shadow:0 0 0 1px var(--line)}
-.flag.thin{height:4px;margin-bottom:10px}
-.org{font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)!important}
+.brand{display:block;color:#fff}
+.brand svg{display:block;height:auto}
+.brand.big svg{width:230px}
+.brand.small{margin-bottom:10px}
+.brand.small svg{width:120px}
 .ed{font-size:22px;line-height:1.1;color:var(--red)!important;margin-top:6px}
 label{display:grid;gap:6px;font-weight:600;font-size:14px}
 input{font:inherit;font-size:18px;padding:11px 12px;border-radius:12px;border:2px solid var(--line);background:var(--panel);color:var(--ink);width:100%}
@@ -82,35 +78,35 @@ input{font:inherit;font-size:18px;padding:11px 12px;border-radius:12px;border:2p
 .score{background:var(--panel);border:2px solid var(--line);border-radius:16px;padding:8px 12px;display:grid;gap:4px;margin-bottom:10px}
 .srow{display:grid;grid-template-columns:78px 1fr 34px;align-items:center;gap:8px}
 .srow .who{font-weight:800;font-size:14px}
-.srow .n{font-family:'Alfa Slab One',Georgia,serif;font-size:22px;text-align:right}
+.srow .n{font-family:'Archivo Black',Georgia,serif;font-size:22px;text-align:right}
 .sticks{display:flex;flex-wrap:wrap;gap:4px}
 .grp line{stroke:var(--stick);stroke-width:3;stroke-linecap:round}
 .grp line.off{opacity:.16}
 .meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding-top:2px}
 
 /* mesa */
-.table{background:var(--felt);border:8px solid var(--rim);border-radius:24px;padding:12px 8px;display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:6px;color:#f4ecd6}
+.table{background:var(--felt);border:8px solid var(--rim);border-radius:24px;padding:12px 8px;display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:6px;color:#fff}
 .seat{display:flex;flex-direction:column;align-items:center;gap:5px;min-height:76px}
 .seat.top{grid-column:1/4}
 .seat.left{grid-column:1;grid-row:2}
 .seat.right{grid-column:3;grid-row:2}
 .seat.bottom{grid-column:1/4;grid-row:3}
 .mid{grid-column:2;grid-row:2;display:flex;align-items:center;justify-content:center;text-align:center;min-height:90px}
-.plate{max-width:100%;padding:3px 10px;border-radius:999px;font-weight:800;font-size:14px;border:2px solid transparent;background:#0f3b2c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plate{max-width:100%;padding:3px 10px;border-radius:999px;font-weight:800;font-size:14px;border:2px solid transparent;background:var(--plate);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .plate.us{border-color:var(--gold)}
-.plate.them{border-color:#e0705b}
+.plate.them{border-color:var(--them)}
 .plate em{font-style:normal;font-weight:600;font-size:11px;opacity:.8;margin-left:4px}
-.seat.turn .plate{background:#f4ecd6;color:#1b1710}
+.seat.turn .plate{background:#fff;color:#0b2340}
 .backs{display:flex;gap:3px;min-height:14px}
-.backs i{display:block;width:12px;height:18px;border-radius:3px;border:1.5px solid #f4ecd6;background:repeating-linear-gradient(45deg,#7a1f1a 0 4px,#5b1511 4px 8px)}
+.backs i{display:block;width:12px;height:18px;border-radius:3px;border:1.5px solid #fff;background:repeating-linear-gradient(45deg,#0b2340 0 4px,#12305a 4px 8px)}
 .played{display:flex;min-height:66px}
 .played .card+.card{margin-left:-26px}
 
 /* cartas */
-.card{--w:88px;width:var(--w);height:calc(var(--w)*1.5);border-radius:calc(var(--w)*.09);background:#fbf3df;border:2px solid #2b2417;position:relative;flex:none;font-family:'Alfa Slab One',Georgia,serif;color:#222}
+.card{--w:88px;width:var(--w);height:calc(var(--w)*1.5);border-radius:calc(var(--w)*.09);background:#fbf3df;border:2px solid #2b2417;position:relative;flex:none;font-family:'Archivo Black',Georgia,serif;color:#222}
 .card.sE{color:#2b4f9e}.card.sB{color:#2f6f3d}.card.sO{color:#c98a12}.card.sC{color:#b8322b}
 .card .cf{position:absolute;inset:0;width:100%;height:100%}
-.card .ct{font-family:'Alfa Slab One',Georgia,serif;font-size:13px;fill:currentColor}
+.card .ct{font-family:'Archivo Black',Georgia,serif;font-size:13px;fill:currentColor}
 .card.sm .ct{font-size:16px}
 .card.sm{--w:44px;border-width:1.5px}
 .hand{display:flex;justify-content:center;gap:10px;margin:14px 0 10px}
@@ -122,7 +118,7 @@ input{font:inherit;font-size:18px;padding:11px 12px;border-radius:12px;border:2p
 /* cantos y estado */
 .shout{padding:6px 4px}
 .shout small{display:block;font-size:13px;opacity:.85}
-.shout b{font-family:'Alfa Slab One',Georgia,serif;font-weight:400;font-size:26px;line-height:1.05;display:block}
+.shout b{font-family:'Archivo Black',Georgia,serif;font-weight:400;font-size:26px;line-height:1.05;display:block}
 .shout.pop{animation:pop .35s ease-out}
 @keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
 @media (prefers-reduced-motion:reduce){.shout.pop{animation:none}}
@@ -142,6 +138,7 @@ input{font:inherit;font-size:18px;padding:11px 12px;border-radius:12px;border:2p
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logoCIA" viewBox="0 0 400.23 143.14"><g fill="currentColor"><path fill-rule="nonzero" d="M293.44 111.01L293.44 98.07L301.05 98.07L301.05 125.13L292.69 125.13C289.90 120.17 287.02 115.07 284.15 109.97C284.01 109.99 283.87 110.02 283.73 110.04L283.73 125.15L276.08 125.15C276.08 116.14 276.11 107.33 276.11 98.04C277.69 98.04 286.04 98.01 286.04 98.01C286.04 98.01 290.92 107.59 292.38 110.29C292.54 110.59 292.82 110.84 293.04 111.12C293.17 111.08 293.30 111.05 293.44 111.01"/><path fill-rule="nonzero" d="M361.36 111.01L361.36 98.07L368.97 98.07L368.97 125.13L360.61 125.13C357.82 120.17 354.94 115.07 352.07 109.97C351.93 109.99 351.79 110.02 351.66 110.04L351.66 125.15L344.01 125.15C344.01 116.14 344.03 107.33 344.03 98.04C345.61 98.04 353.96 98.01 353.96 98.01C353.96 98.01 358.84 107.59 360.30 110.29C360.46 110.59 360.74 110.84 360.96 111.12C361.09 111.08 361.23 111.05 361.36 111.01"/><path fill-rule="nonzero" d="M381.25 19.71C381.10 19.71 380.93 19.72 380.77 19.71C378.75 25.16 376.75 30.56 374.69 36.12L387.37 36.12C385.29 30.55 383.27 25.13 381.25 19.71M369.30 46.58C370.83 42.40 372.28 38.41 373.75 34.43C375.66 29.26 378.07 22.71 379.98 17.55C380.44 17.54 381.75 17.52 382.03 17.52C385.39 26.55 389.31 37.00 392.69 46.03C392.75 46.19 392.80 46.36 392.87 46.54C392.15 46.58 391.22 46.55 391.22 46.55C391.22 46.55 390.98 45.96 390.90 45.74C390.13 43.63 389.36 41.51 388.58 39.40C388.39 38.88 388.14 38.37 387.88 37.78L374.15 37.78C373.17 40.38 371.82 43.87 370.88 46.56C370.30 46.58 370.03 46.57 369.30 46.58"/><path fill-rule="nonzero" d="M205.45 57.51L205.45 84.61C202.84 84.61 200.29 84.67 197.75 84.56C197.30 84.54 196.73 83.91 196.46 83.43C194.16 79.41 191.93 75.35 189.67 71.31C189.28 70.62 188.88 69.95 188.14 69.39L188.14 84.47L180.62 84.47L180.62 57.53L190.22 57.53C192.60 61.91 195.03 66.39 197.46 70.87C197.60 70.84 197.74 70.81 197.88 70.78L197.88 57.51L205.45 57.51"/><path fill-rule="nonzero" d="M392.56 84.53L383.86 84.53L383.86 74.46L376.14 74.46L376.14 84.50L367.28 84.50L367.28 57.54L376.01 57.54L376.01 67.24L383.78 67.24L383.78 57.57L392.56 57.57L392.56 84.53"/><path fill-rule="nonzero" d="M247.99 107.71L239.69 107.71C239.08 105.46 237.58 104.29 235.19 104.36C233.04 104.41 231.36 105.41 230.64 107.41C230.08 108.97 229.76 111.88 230.01 114.22C230.81 119.16 234.95 119.69 238.27 118.51C239.34 118.13 239.79 117.42 240.18 115.69L235.82 115.69L235.82 110.11L248.83 110.11C249.06 114.82 248.91 119.25 244.99 122.59C243.06 124.23 240.83 125.13 238.37 125.46C234.83 125.94 231.38 125.75 228.03 124.29C221.37 121.40 219.94 113.78 220.87 108.79C222.49 100.06 230.33 96.59 237.82 97.62C240.25 97.95 242.60 98.60 244.56 100.23C246.93 102.19 248.20 104.83 247.99 107.71"/><path fill-rule="nonzero" d="M273.43 69.85C275.39 69.63 277.41 70.23 278.35 68.24C278.74 67.40 278.77 65.99 278.31 65.23C277.20 63.38 275.24 64.17 273.43 64.12L273.43 69.85M264.57 57.14C270.12 57.43 275.97 56.97 281.25 57.55C284.57 57.91 286.31 60.66 286.96 64.03C287.65 67.66 287.01 70.93 283.62 73.11C283.37 73.28 283.12 73.45 282.73 73.71C284.71 77.27 286.53 80.57 288.70 84.49L279.70 84.49C278.96 83.11 275.64 77.89 274.84 76.55C274.59 76.12 274.25 75.62 273.86 75.27C273.70 75.35 273.55 75.43 273.39 75.50L273.39 84.53L264.57 84.53C264.57 75.47 264.57 66.57 264.57 57.14"/><path fill-rule="nonzero" d="M204.18 104.49L204.18 110.08C206.01 110.23 207.97 110.74 209.08 109.03C209.61 108.21 209.63 106.54 209.14 105.70C208.07 103.88 206.05 104.56 204.18 104.49M213.62 114.23C215.63 117.87 217.62 121.45 219.70 125.20L210.50 125.20C209.18 122.76 207.84 120.29 206.51 117.82C206.33 117.49 206.21 117.10 205.96 116.84C205.61 116.47 205.16 116.19 204.74 115.87C204.54 116.33 204.17 116.80 204.16 117.27C204.09 119.28 204.13 121.29 204.13 123.30L204.13 125.20L195.53 125.20L195.53 97.89C196.35 97.89 197.09 97.88 197.82 97.89C201.90 97.96 206.02 97.91 210.27 97.91C212.99 98.07 215.15 99.47 216.75 101.82C218.67 104.67 219.16 110.66 214.61 113.47C214.29 113.67 214.02 113.92 213.62 114.23"/><path fill-rule="nonzero" d="M234.99 57.50L243.40 57.50C243.44 58.30 243.50 59.03 243.50 59.77C243.51 64.05 243.49 68.32 243.52 72.59C243.52 73.53 243.59 74.48 243.77 75.40C244.23 77.68 245.37 78.47 247.80 78.31C249.74 78.17 250.83 77.15 250.88 74.99C251.01 70.02 250.97 65.06 251.01 60.09C251.02 59.29 251.08 58.48 251.12 57.55L259.55 57.55C259.67 57.73 259.78 57.83 259.78 57.94C259.79 63.84 259.96 69.76 259.73 75.66C259.51 80.80 255.78 84.28 249.92 85.10C246.11 85.64 242.38 85.24 239.06 83.06C236.57 81.43 235.14 78.97 235.05 76.13C234.84 69.98 234.99 63.82 234.99 57.50"/><path fill-rule="nonzero" d="M364.08 67.71L355.07 67.71C354.94 67.38 354.81 67.03 354.67 66.68C353.80 64.61 352.87 63.93 350.88 63.96C348.91 63.98 347.30 65.02 346.65 66.80C345.60 69.63 345.65 72.48 346.66 75.30C347.30 77.06 349.16 78.30 351.09 78.19C352.92 78.08 354.57 77.54 355.17 75.49C355.29 75.08 355.50 74.69 355.69 74.20L364.09 74.20C364.07 77.99 362.65 80.95 359.55 82.99C354.61 86.22 346.52 86.01 341.68 82.60C339.26 80.89 337.81 78.49 337.25 75.64C336.20 70.40 336.39 65.32 340.39 61.20C345.01 56.45 350.70 56.27 356.64 57.86C359.50 58.63 361.59 60.54 362.76 63.28C363.34 64.62 363.61 66.10 364.08 67.71"/><path fill-rule="nonzero" d="M178.16 105.82C178.04 105.81 177.93 105.81 177.81 105.81C176.99 108.70 176.17 111.59 175.33 114.56L180.54 114.56C179.72 111.53 178.94 108.67 178.16 105.82M192.73 125.20L183.50 125.20C183.05 123.75 182.62 122.33 182.15 120.81L173.74 120.81C173.32 122.20 172.89 123.63 172.43 125.15L164.30 125.15C167.16 116.05 169.98 107.06 172.83 98.01L184.19 98.01C187.02 107.02 189.85 116.02 192.73 125.20"/><path fill-rule="nonzero" d="M385.72 105.79C385.57 105.79 385.42 105.78 385.27 105.77C384.48 108.66 383.68 111.56 382.85 114.60L388.04 114.60C387.24 111.55 386.48 108.67 385.72 105.79M391.72 98.08C394.54 107.06 397.36 116.01 400.23 125.13L391.01 125.13C390.58 123.74 390.15 122.32 389.69 120.80L381.17 120.80C380.74 122.28 380.32 123.71 379.89 125.19L371.81 125.19C374.66 116.11 377.46 107.19 380.32 98.08C384.01 98.08 387.74 98.08 391.72 98.08"/><path fill-rule="nonzero" d="M231.05 65.75L223.46 65.75C222.06 63.46 221.15 62.82 219.40 63.34C218.70 63.55 217.92 64.28 217.65 64.96C217.28 65.87 218.10 66.50 218.94 66.69C221.01 67.16 223.12 67.46 225.19 67.94C228.17 68.63 230.85 69.81 231.75 73.11C233.10 78.09 230.67 82.78 225.82 84.41C221.61 85.82 217.39 85.61 213.32 83.78C210.31 82.41 208.57 79.39 208.79 75.96L216.65 75.96C218.04 78.59 219.30 79.35 221.58 78.89C222.61 78.68 223.49 78.26 223.63 77.02C223.79 75.68 222.87 75.19 221.88 74.97C219.98 74.55 218.04 74.30 216.13 73.95C209.87 72.81 207.20 66.52 210.66 61.15C211.93 59.17 213.85 58.12 216.00 57.57C219.48 56.68 222.99 56.76 226.36 58.10C229.35 59.27 231.20 62.32 231.05 65.75"/><path fill-rule="nonzero" d="M252.44 98.03L271.75 98.03L271.75 104.51L261.14 104.51L261.14 108.27L269.46 108.27L269.46 114.64L261.15 114.64L261.15 118.51L272.34 118.51L272.34 125.14L252.44 125.14L252.44 98.03"/><path fill-rule="nonzero" d="M334.27 57.56L334.27 64.06L323.70 64.06L323.70 67.85L332.03 67.85L332.03 73.95L323.71 73.95L323.71 77.84L334.80 77.84L334.80 84.54L314.98 84.54L314.98 57.56C321.39 57.56 327.75 57.56 334.27 57.56"/><path fill-rule="nonzero" d="M296.04 64.16L289.31 64.16L289.31 57.50L311.60 57.50L311.60 64.03L304.98 64.03L304.98 84.49L296.04 84.49C296.04 77.77 296.04 71.03 296.04 64.16"/><path fill-rule="nonzero" d="M311.18 104.64L304.49 104.64L304.49 98.06L326.76 98.06L326.76 104.53L319.97 104.53L319.97 125.14L311.18 125.14L311.18 104.64"/><path fill-rule="nonzero" d="M166.48 57.42h8.75v27.40h-8.75z"/><path fill-rule="nonzero" d="M330.01 97.75h8.99v27.41h-8.99z"/><path fill-rule="nonzero" d="M275.28 17.75L275.28 46.64C274.83 46.66 274.47 46.64 273.79 46.65C273.79 38.05 273.79 29.69 273.79 21.20C273.60 21.16 273.40 21.10 273.22 21.06C269.50 29.67 265.80 38.27 262.08 46.87C261.87 46.89 261.65 46.90 261.44 46.91C257.79 38.30 254.13 29.69 250.49 21.08C250.34 21.11 250.19 21.14 250.05 21.17L250.05 46.76L248.53 46.76L248.53 17.68C249.23 17.70 249.87 17.70 250.71 17.67C254.35 26.33 257.96 34.77 261.78 43.86C262.96 41.13 263.96 38.82 264.96 36.50C267.46 30.69 270.52 23.62 272.93 17.77C273.82 17.78 274.69 17.77 275.28 17.75"/><path fill-rule="nonzero" d="M336.56 18.94L336.56 31.58C339.64 31.58 342.64 31.76 345.60 31.51C347.33 31.36 348.93 30.48 349.90 28.73C351.90 25.13 350.27 20.38 346.30 19.52C343.22 18.85 340.02 18.89 336.56 18.94M336.44 33.21L336.44 39.94L336.44 46.62L334.86 46.62L334.86 17.55C339.29 17.60 343.99 17.17 347.96 18.48C350.87 19.59 352.28 22.10 352.21 25.54C352.15 28.66 350.72 31.32 347.53 32.41C346.71 32.69 345.82 32.93 344.60 33.07C347.67 37.58 350.78 42.17 353.77 46.55C352.39 46.59 352.73 46.55 351.86 46.55C349.33 42.82 346.13 38.24 343.63 34.50C343.29 33.99 342.76 33.22 342.76 33.22C342.76 33.22 341.78 33.20 341.18 33.19C339.70 33.16 338.20 33.21 336.44 33.21"/><path fill-rule="nonzero" d="M190.94 26.41C190.52 26.12 189.84 25.92 189.72 25.53C188.28 21.10 185.17 18.98 180.62 18.70C175.76 18.40 171.97 20.31 169.64 24.52C166.77 29.73 166.86 35.11 169.74 40.34C172.00 44.43 175.81 45.83 180.19 45.75C183.98 45.67 187.14 44.15 189.13 40.74C189.54 40.05 189.79 39.26 190.06 38.49C190.35 37.68 190.80 37.36 191.76 37.91C190.87 41.99 188.53 44.84 184.60 46.30C178.32 48.62 170.49 46.62 167.46 39.58C164.52 32.74 165.58 22.80 173.79 18.62C178.69 16.12 187.67 16.70 190.68 23.62C190.99 24.35 191.16 25.15 191.40 25.91C191.25 26.09 191.09 26.25 190.94 26.41"/><path fill-rule="nonzero" d="M225.13 36.17C223.02 30.52 220.98 25.06 218.94 19.60C218.80 19.62 218.67 19.62 218.53 19.64C216.50 25.11 214.47 30.58 212.40 36.17C216.68 36.17 220.76 36.17 225.13 36.17M211.87 37.77C210.89 40.42 209.95 42.94 209.01 45.45C208.53 46.71 208.52 46.71 207.02 46.54C210.59 36.90 214.14 27.31 217.72 17.64L219.86 17.64C223.42 27.19 227.01 36.84 230.62 46.53C229.52 47.10 229.03 46.71 228.69 45.77C227.72 43.12 226.72 40.49 225.70 37.77C221.13 37.77 216.57 37.77 211.87 37.77"/><path fill-rule="nonzero" d="M305.41 19.71C305.25 19.71 305.08 19.72 304.92 19.71C302.91 25.16 300.90 30.56 298.85 36.12L311.52 36.12C309.45 30.55 307.43 25.13 305.41 19.71M293.46 46.58C294.98 42.40 296.43 38.41 297.91 34.43C299.81 29.26 302.23 22.71 304.13 17.55C304.60 17.54 305.90 17.52 306.19 17.52C309.54 26.55 313.47 37.00 316.84 46.03C316.90 46.19 316.95 46.36 317.02 46.54C316.30 46.58 315.38 46.55 315.38 46.55C315.38 46.55 315.14 45.96 315.06 45.74C314.28 43.63 313.52 41.51 312.73 39.40C312.54 38.88 312.29 38.37 312.04 37.78L298.30 37.78C297.32 40.38 295.98 43.87 295.03 46.56C294.45 46.58 294.18 46.57 293.46 46.58"/><path fill-rule="nonzero" d="M149.81 0.00h2.49v143.14h-2.49z"/><path fill-rule="nonzero" d="M221.10 9.92L222.13 10.65L218.63 15.60L217.61 14.88L221.10 9.92"/><path fill-rule="nonzero" d="M127.65 92.25C126.49 84.92 123.96 78.02 120.94 71.31C120.41 77.18 117.93 82.50 115.28 87.75C115.11 88.07 114.91 88.36 114.70 88.64C115.23 91.25 115.41 93.92 115.20 96.64C115.01 98.99 111.42 103.79 100.80 104.61C99.68 104.70 88.05 105.03 82.74 104.15C73.25 102.81 63.69 100.82 54.82 96.96C50.79 95.21 47.01 93.63 43.09 91.62C42.70 91.42 42.30 91.25 41.90 91.06C42.37 93.83 42.72 96.62 43.35 99.35C43.88 101.67 44.72 103.92 45.43 106.19C52.94 109.98 60.61 112.96 68.85 114.62C72.35 115.21 86.87 116.83 87.77 116.92C95.30 117.62 103.02 116.43 110.44 114.85C114.52 113.98 118.46 112.77 122.07 110.62C125.35 108.67 127.55 105.63 128.12 101.76C128.36 98.53 128.16 95.44 127.65 92.25"/><path fill-rule="nonzero" d="M40.90 47.53C41.38 45.57 41.84 43.49 42.54 41.60C43.72 38.41 45.00 35.35 46.32 32.21C48.23 27.75 50.76 23.73 54.57 20.65C55.20 20.14 56.03 19.89 56.76 19.51C58.46 18.42 60.36 17.98 62.30 17.46C64.63 16.84 66.93 16.84 69.28 16.78C72.62 16.69 75.44 16.82 78.52 18.12C78.91 18.28 79.74 18.59 80.15 18.78C78.00 16.97 75.93 15.05 73.69 13.35C69.86 10.45 65.80 7.88 61.19 6.38C56.34 4.79 51.88 5.24 48.10 9.03C48.09 9.04 48.08 9.06 48.08 9.07L48.10 9.03C46.96 10.13 45.70 11.12 44.69 12.34C40.43 17.52 37.35 23.41 34.75 29.56C31.02 38.40 28.22 47.62 26.41 57.07C25.01 64.30 24.56 71.72 24.85 79.08C24.88 79.78 25.24 87.09 25.66 90.02C25.90 91.79 27.01 96.52 27.04 97.16C27.56 99.01 28.09 100.85 28.58 102.71C30.65 110.63 33.56 118.20 37.95 125.13C39.74 127.94 41.78 130.59 44.65 132.42C46.83 133.81 49.19 134.40 51.70 134.09C51.83 134.10 51.97 134.10 52.12 134.10C52.69 134.12 53.79 133.86 54.34 133.73C61.19 132.15 67.27 128.87 72.79 124.68C73.46 124.17 74.16 123.35 74.65 122.57C71.65 123.35 68.69 124.36 65.65 124.87C59.94 125.82 54.62 124.93 50.46 120.37C50.31 120.20 50.25 119.93 50.15 119.71C46.09 116.05 43.78 111.32 42.14 106.20C41.43 103.92 40.59 101.68 40.05 99.36C39.43 96.63 39.08 93.83 38.61 91.06C38.44 90.25 38.20 89.45 38.11 88.64C36.94 78.77 36.10 68.88 37.92 59.02C38.64 55.14 39.89 51.36 40.90 47.53"/><path fill-rule="nonzero" d="M21.65 80.11C21.72 83.07 22.36 86.73 22.56 89.68C22.67 91.17 22.92 92.65 23.29 94.10C23.47 94.82 23.66 95.55 23.93 96.25C24.03 96.50 24.32 97.58 24.44 97.67C16.64 91.63 8.42 84.24 3.30 75.66C1.48 72.62 0.00 69.39 0.26 65.66C0.56 61.37 3.02 58.24 5.85 55.42C11.41 49.89 20.10 44.65 27.14 41.30C26.87 41.43 26.20 44.41 26.03 44.84C24.66 48.48 23.60 52.61 23.31 56.51C20.92 58.63 18.42 60.64 16.18 62.91C13.70 65.41 13.74 68.38 15.31 71.43C17.12 74.95 18.91 77.30 21.65 80.11"/><path fill-rule="nonzero" d="M123.05 30.66C122.29 28.02 120.17 25.89 117.65 24.35C113.34 21.70 108.54 21.22 103.76 20.81C98.01 20.31 92.29 21.12 86.59 21.87C83.95 22.49 81.22 22.94 78.58 23.53C76.86 23.90 75.25 24.46 73.54 24.83C73.40 24.86 73.18 24.91 72.90 24.99C70.42 25.64 62.92 27.85 59.27 29.01C56.04 30.04 52.83 31.14 49.60 32.21C48.28 35.35 47.75 36.62 46.57 39.81C45.87 41.70 44.67 45.56 44.18 47.53C46.24 46.74 48.29 45.90 50.37 45.17C56.83 42.87 63.28 40.54 69.77 38.38C73.80 37.03 77.90 35.93 81.98 34.75C82.52 34.60 87.85 33.53 89.96 33.23C92.21 32.91 104.12 32.45 107.71 34.32C109.26 35.14 110.55 36.91 110.96 38.51C111.86 42.02 111.98 45.58 111.24 49.14C110.91 53.01 104.93 70.76 104.10 72.67C101.70 78.15 99.23 83.62 95.81 88.54C93.50 91.87 90.98 95.06 88.39 98.18C87.34 99.45 86.19 100.64 85.03 101.82C85.30 101.54 87.79 102.15 88.24 102.21C92.05 102.70 95.81 102.69 99.65 102.54C100.52 102.51 101.07 101.25 101.58 100.62C101.97 100.14 102.35 99.66 102.73 99.17C103.51 98.18 104.27 97.18 105.02 96.17C107.59 92.67 109.95 89.04 112.00 85.19C112.19 84.82 112.38 84.44 112.57 84.05C112.72 83.75 112.86 83.45 113.01 83.14C113.85 80.82 115.06 78.60 115.90 76.28C116.97 73.31 117.81 70.51 118.91 67.45C119.21 66.68 119.41 66.05 119.67 65.28C119.96 64.45 120.22 63.62 120.47 62.78C120.54 62.56 120.60 62.33 120.66 62.10C120.83 61.50 121.01 60.90 121.16 60.29C121.28 59.85 121.37 59.40 121.48 58.95C121.57 58.56 121.67 58.17 121.76 57.77C121.86 57.32 121.94 56.87 122.03 56.41C122.11 56.02 122.20 55.63 122.27 55.23C122.35 54.82 122.41 54.40 122.48 53.99C122.55 53.55 122.63 53.11 122.70 52.67C122.76 52.30 122.80 51.93 122.85 51.56C122.92 51.07 122.99 50.58 123.05 50.08C123.09 49.75 123.12 49.42 123.16 49.09C123.22 48.56 123.28 48.02 123.33 47.49C123.36 47.17 123.38 46.85 123.41 46.53C123.45 46.03 123.50 45.54 123.53 45.04C123.54 44.96 123.54 44.88 123.55 44.79C123.68 42.87 123.81 33.34 123.05 30.66"/><path fill-rule="nonzero" d="M103.26 63.58C103.32 63.50 103.37 63.41 103.43 63.33C103.42 63.36 103.40 63.37 103.38 63.40C103.47 63.27 103.56 63.15 103.64 63.02C103.82 62.76 103.98 62.49 104.13 62.22C104.45 61.67 104.73 61.10 105.00 60.52C105.27 59.96 105.53 59.39 105.80 58.83C105.95 58.54 106.08 58.25 106.22 57.97L106.23 57.95C106.25 57.91 106.26 57.88 106.28 57.82C107.11 55.66 107.67 53.42 108.53 51.28C105.03 46.39 101.54 41.51 98.05 36.62C95.68 36.73 93.28 36.66 90.94 36.99C88.75 37.30 86.07 37.39 83.92 37.93C90.65 45.46 97.34 54.08 102.69 62.65C102.88 62.96 103.07 63.27 103.26 63.58"/></g></symbol>
   <symbol id="pO" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.6" fill="#e9b23a" stroke="#8a5a0e" stroke-width="1.3"/><circle cx="12" cy="12" r="7" fill="#f6d06b" stroke="#a8740c" stroke-width="1"/><circle cx="12" cy="12" r="3.2" fill="#c8442f" stroke="#8a5a0e" stroke-width=".8"/></symbol>
   <symbol id="pC" viewBox="0 0 24 24"><path d="M5 4h14c0 5.8-2.8 9.2-7 9.8C7.8 13.2 5 9.8 5 4z" fill="#c8322b" stroke="#6b1a14" stroke-width=".9"/><rect x="4.2" y="2.2" width="15.6" height="2.6" rx="1.3" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".7"/><rect x="10.8" y="13.4" width="2.4" height="4.6" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".6"/><ellipse cx="12" cy="15.4" rx="2.4" ry="1.3" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".6"/><path d="M6.6 22.2c0-2.4 2.4-3.8 5.4-3.8s5.4 1.4 5.4 3.8z" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".7"/></symbol>
   <symbol id="pE" viewBox="0 0 24 48"><path d="M12 1L15.2 6.5V32.5H8.8V6.5z" fill="#4a7fd0" stroke="#1f3f78" stroke-width=".9"/><line x1="12" y1="6" x2="12" y2="31" stroke="#cfe0fa" stroke-width=".9"/><rect x="4.5" y="32.2" width="15" height="3.2" rx="1.6" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".8"/><rect x="10.4" y="35.4" width="3.2" height="8" fill="#c8442f" stroke="#6b1a14" stroke-width=".7"/><circle cx="12" cy="45" r="2.6" fill="#e9b23a" stroke="#8a5a0e" stroke-width=".8"/></symbol>
@@ -295,12 +292,12 @@ function sticks(n,groups){
   }
   return out;
 }
+var LOGO='<svg viewBox="0 0 400.23 143.14" role="img" aria-label="Cámara Insurtech Argentina"><use href="#logoCIA"/></svg>';
 function header(){
-  return '<div class="flag thin"></div><div class="top"><div class="l"><span class="disp code">'+esc(code||'')+'</span>'+(code?btn('copy','Copiar código','ghost small'):'')+'</div><div>'+btn('exit','Salir','ghost small')+'</div></div>';
+  return '<span class="brand small">'+LOGO+'</span><div class="top"><div class="l"><span class="disp code">'+esc(code||'')+'</span>'+(code?btn('copy','Copiar código','ghost small'):'')+'</div><div>'+btn('exit','Salir','ghost small')+'</div></div>';
 }
 function entryHTML(){
-  return '<div class="entry"><div class="flag"></div>'+
-  '<p class="org">Cámara Insurtech Argentina</p>'+
+  return '<div class="entry"><span class="brand big">'+LOGO+'</span>'+
   '<div><h1 class="disp logo">Truco</h1><p class="disp ed">Edición Alemania 2026</p></div>'+
   '<p>Mano a mano o de a cuatro en parejas, cada uno desde su celu.</p>'+
   '<label>Tu nombre<input id="nm" maxlength="14" autocomplete="nickname" value="'+esc(name)+'" placeholder="Ej: Valen"></label>'+
