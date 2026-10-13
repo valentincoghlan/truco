@@ -36,7 +36,7 @@ function newDeck() {
 }
 function dealRound(d, mano) {
   const dk = newDeck(), hands = {}, init = {}, played = {};
-  for (let s = 0; s < 4; s++) { hands[s] = dk.slice(s * 3, s * 3 + 3); init[s] = hands[s].slice(); played[s] = []; }
+  for (let s = 0; s < d.size; s++) { hands[s] = dk.slice(s * 3, s * 3 + 3); init[s] = hands[s].slice(); played[s] = []; }
   d.round = { n: d.round ? d.round.n + 1 : 1, mano, turn: mano, hands, init, played, bazas: [], cur: [], trucoLvl: 0, trucoRight: -1, ask: null, envidoDone: false, envidoRes: null, over: null };
 }
 function roundWinner(bz, mano) {
@@ -57,7 +57,7 @@ function addLog(d, seat, t) {
   if (d.log.length > 8) d.log = d.log.slice(-8);
 }
 const nm = (d, s) => (d.seats[s] ? d.seats[s].name : '?');
-const teamName = (d, t) => nm(d, t) + ' y ' + nm(d, t + 2);
+const teamName = (d, t) => (d.size === 2 ? nm(d, t) : nm(d, t) + ' y ' + nm(d, t + 2));
 function checkEnd(d, team) {
   if (d.score[team] >= d.target) { d.status = 'finished'; d.winner = team; addLog(d, -1, 'Ganaron ' + teamName(d, team)); }
 }
@@ -72,7 +72,7 @@ function playCard(d, seat, card) {
   r.hands[seat] = r.hands[seat].filter((c) => c !== card);
   r.played[seat].push(card);
   r.cur.push({ s: seat, c: card });
-  if (r.cur.length < 4) { r.turn = (seat + 1) % 4; return; }
+  if (r.cur.length < d.size) { r.turn = (seat + 1) % d.size; return; }
   const mx = Math.max(...r.cur.map((x) => power(x.c)));
   const tops = r.cur.filter((x) => power(x.c) === mx);
   const teams = [...new Set(tops.map((x) => x.s % 2))];
@@ -105,6 +105,12 @@ function envClose(d, w, pts, res) {
   r.ask = a.then || null;
   checkEnd(d, w);
   if (d.status === 'finished') { r.ask = null; r.over = { team: w, pts: 0, t: 'cerró la partida con el envido' }; }
+}
+/* envido de una pareja: el mejor entre sus jugadores (en mano a mano, el único) */
+function teamEnvido(d, t) {
+  let best = -1;
+  for (let s = t; s < d.size; s += 2) best = Math.max(best, envidoOf(d.round.init[s]));
+  return best;
 }
 function mySeatOf(d, uid) {
   for (let s = 0; s < 4; s++) if (d.seats[s] && d.seats[s].uid === uid) return s;
@@ -160,8 +166,7 @@ function doRespond(d, uid, resp) {
   } else {
     if (resp === 'quiero') {
       const pts = envPoints(d, a.calls, true);
-      const e0 = Math.max(envidoOf(r.init[0]), envidoOf(r.init[2]));
-      const e1 = Math.max(envidoOf(r.init[1]), envidoOf(r.init[3]));
+      const e0 = teamEnvido(d, 0), e1 = teamEnvido(d, 1);
       const w = e0 > e1 ? 0 : e1 > e0 ? 1 : r.mano % 2;
       addLog(d, m, 'Quiero');
       addLog(d, -1, 'Envido: ' + e0 + ' contra ' + e1 + '. +' + pts + ' para ' + teamName(d, w));
@@ -180,13 +185,13 @@ function doRespond(d, uid, resp) {
 }
 function doNext(d, uid) {
   if (mySeatOf(d, uid) === null || d.status !== 'playing' || !d.round.over) return false;
-  dealRound(d, (d.round.mano + 1) % 4);
+  dealRound(d, (d.round.mano + 1) % d.size);
   addLog(d, -1, 'Nueva mano');
 }
 function doRematch(d, uid) {
   if (mySeatOf(d, uid) === null || d.status !== 'finished') return false;
   d.score = { 0: 0, 1: 0 }; d.status = 'playing'; d.winner = null;
-  dealRound(d, (d.round.mano + 1) % 4);
+  dealRound(d, (d.round.mano + 1) % d.size);
   addLog(d, -1, 'Revancha');
 }
 function applyAct(d, uid, a) {
@@ -212,7 +217,7 @@ function genCode() {
   }
 }
 function newRoom(code) {
-  return { d: { code, status: 'lobby', target: 30, seats: {}, score: { 0: 0, 1: 0 }, log: [], round: null, winner: null }, clients: new Set(), last: Date.now() };
+  return { d: { code, status: 'lobby', size: 4, target: 30, seats: {}, score: { 0: 0, 1: 0 }, log: [], round: null, winner: null }, clients: new Set(), last: Date.now() };
 }
 /* lo que ve cada jugador: sus cartas sí, las de los demás solo la cantidad */
 function view(room, uid) {
@@ -222,7 +227,7 @@ function view(room, uid) {
   for (const s of Object.keys(d.seats)) d.seats[s] = { name: d.seats[s].name, on: online.has(room.d.seats[s].uid) };
   if (d.round) {
     delete d.round.init;
-    for (let s = 0; s < 4; s++) if (s !== mine) d.round.hands[s] = d.round.hands[s].map(() => 0);
+    for (let s = 0; s < d.size; s++) if (s !== mine) d.round.hands[s] = d.round.hands[s].map(() => 0);
   }
   return { d, mine };
 }
@@ -276,7 +281,7 @@ wss.on('connection', (ws) => {
     const mine = mySeatOf(d, ws.uid);
     if (m.t === 'sit') {
       const s = Number(m.s);
-      if (d.status !== 'lobby' || !Number.isInteger(s) || s < 0 || s > 3) return;
+      if (d.status !== 'lobby' || !Number.isInteger(s) || s < 0 || s >= d.size) return;
       if (!ws.name) return fail(ws, 'Poné tu nombre primero');
       if (d.seats[s] && d.seats[s].uid !== ws.uid) return fail(ws, 'Ese lugar ya está ocupado');
       if (mine !== null) delete d.seats[mine];
@@ -284,11 +289,21 @@ wss.on('connection', (ws) => {
     } else if (m.t === 'stand') {
       if (d.status !== 'lobby' || mine === null) return;
       delete d.seats[mine];
+    } else if (m.t === 'size') {
+      if (d.status !== 'lobby' || mine === null || (m.n !== 2 && m.n !== 4)) return;
+      d.size = m.n;
+      /* al pasar a mano a mano, los sentados en 2 y 3 se mueven a los lugares libres (si no hay, quedan parados) */
+      for (const s of [2, 3]) {
+        if (d.size === 4 || !d.seats[s]) continue;
+        const free = [0, 1].find((x) => !d.seats[x]);
+        if (free !== undefined) d.seats[free] = d.seats[s];
+        delete d.seats[s];
+      }
     } else if (m.t === 'target') {
       if (d.status !== 'lobby' || mine === null || (m.n !== 15 && m.n !== 30)) return;
       d.target = m.n;
     } else if (m.t === 'start') {
-      if (d.status !== 'lobby' || mine === null || Object.keys(d.seats).length < 4) return;
+      if (d.status !== 'lobby' || mine === null || Object.keys(d.seats).length < d.size) return;
       d.status = 'playing'; d.score = { 0: 0, 1: 0 }; d.winner = null; d.log = [];
       dealRound(d, 0);
       addLog(d, -1, 'Se reparten las cartas');

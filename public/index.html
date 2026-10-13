@@ -202,7 +202,9 @@ function envNext(calls){
   return [];
 }
 function nm(d,s){return d.seats[s]?d.seats[s].name:'?'}
-function teamName(d,t){return nm(d,t)+' y '+nm(d,t+2)}
+function teamName(d,t){return d.size===2?nm(d,t):nm(d,t)+' y '+nm(d,t+2)}
+/* en mano a mano se habla en singular */
+function usThem(d,us){return d.size===2?(us?'Vos':'Rival'):(us?'Nosotros':'Ellos')}
 
 /* ---------- acciones ---------- */
 function needName(){
@@ -235,6 +237,7 @@ function handle(a){
   }
   if(a==='stand') return send({t:'stand'});
   if(a==='start') return send({t:'start'});
+  if(a.indexOf('size:')===0) return send({t:'size',n:+a.slice(5)});
   if(a.indexOf('target:')===0) return send({t:'target',n:+a.slice(7)});
   if(a==='mazo'){
     if(!mazoArmed){mazoArmed=true;clearTimeout(mazoT);mazoT=setTimeout(function(){mazoArmed=false;render()},3000);return render()}
@@ -273,7 +276,7 @@ function header(){
 }
 function entryHTML(){
   return '<div class="entry"><h1 class="disp logo">Truco</h1>'+
-  '<p>Cuatro jugadores, de a dos, cada uno desde su celu.</p>'+
+  '<p>Mano a mano o de a cuatro en parejas, cada uno desde su celu.</p>'+
   '<label>Tu nombre<input id="nm" maxlength="14" autocomplete="nickname" value="'+esc(name)+'" placeholder="Ej: Valen"></label>'+
   btn('create','Crear mesa','primary')+
   '<div class="sep">o entrá a una mesa</div>'+
@@ -281,24 +284,26 @@ function entryHTML(){
   '</div>';
 }
 function lobbyHTML(d){
-  var n=Object.keys(d.seats).length,h=header();
+  var n=Object.keys(d.seats).length,h=header(),two=d.size===2,off=mine===null?'disabled':'';
   function slot(s){
     var p=d.seats[s];
     if(p) return '<div class="slot"><b>'+esc(p.name)+(s===mine?' (vos)':'')+'</b>'+(s===mine?btn('stand','Levantarme','ghost small'):'')+'</div>';
     return '<div class="slot"><span class="empty">Libre</span>'+btn('sit:'+s,'Sentarme','small')+'</div>';
   }
   h+='<h2 class="disp" style="font-size:26px;margin-top:6px">Armando la mesa</h2>';
-  h+='<p class="hint">Compartí el código '+esc(code)+' con los otros tres. Los compañeros van en la misma pareja.</p>';
-  h+='<div class="pairs"><div class="pair"><h2 class="disp">Pareja A</h2>'+slot(0)+slot(2)+'</div><div class="pair"><h2 class="disp">Pareja B</h2>'+slot(1)+slot(3)+'</div></div>';
+  h+='<p class="hint">'+(two?'Compartí el código '+esc(code)+' con tu rival.':'Compartí el código '+esc(code)+' con los otros tres. Los compañeros van en la misma pareja.')+'</p>';
+  h+='<div class="tg"><span>Jugadores</span>'+btn('size:2','2','small '+(two?'on':''),off)+btn('size:4','4','small '+(!two?'on':''),off)+'</div>';
+  if(two) h+='<div class="pairs"><div class="pair"><h2 class="disp">Jugador A</h2>'+slot(0)+'</div><div class="pair"><h2 class="disp">Jugador B</h2>'+slot(1)+'</div></div>';
+  else h+='<div class="pairs"><div class="pair"><h2 class="disp">Pareja A</h2>'+slot(0)+slot(2)+'</div><div class="pair"><h2 class="disp">Pareja B</h2>'+slot(1)+slot(3)+'</div></div>';
   h+='<div class="tg"><span>Se juega a</span>'+btn('target:15','15','small '+(d.target===15?'on':''),mine===null?'disabled':'')+btn('target:30','30','small '+(d.target===30?'on':''),mine===null?'disabled':'')+'<span>puntos</span></div>';
-  h+=btn('start',n<4?'Faltan '+(4-n)+' para empezar':'Empezar','primary',(n<4||mine===null)?'disabled':'');
+  h+=btn('start',n<d.size?'Faltan '+(d.size-n)+' para empezar':'Empezar','primary',(n<d.size||mine===null)?'disabled':'');
   return h;
 }
 function scoreHTML(d,myT){
   var groups=d.target/5;
   function row(t){
-    var label=t===myT?'Nosotros':'Ellos';
-    if(mine===null) label=t===0?'Pareja A':'Pareja B';
+    var label=usThem(d,t===myT);
+    if(mine===null) label=(d.size===2?'Jugador ':'Pareja ')+(t===0?'A':'B');
     return '<div class="srow"><span class="who">'+label+'</span><div class="sticks">'+sticks(d.score[t],groups)+'</div><span class="n">'+d.score[t]+'</span></div>';
   }
   var r=d.round,lvl=r&&!r.over?POINTS[r.trucoLvl]:null;
@@ -356,7 +361,7 @@ function gameHTML(d){
   var r=d.round,myT=mine===null?0:mine%2,base=mine===null?0:mine;
   var h=header();
   h+=scoreHTML(d,myT);
-  var pos={bottom:base%4,right:(base+1)%4,top:(base+2)%4,left:(base+3)%4};
+  var pos=d.size===2?{bottom:base,top:1-base}:{bottom:base%4,right:(base+1)%4,top:(base+2)%4,left:(base+3)%4};
   var last=null;
   for(var i=(d.log||[]).length-1;i>=0;i--){if(d.log[i].s>=0){last=d.log[i];break}}
   var shout='';
@@ -364,11 +369,12 @@ function gameHTML(d){
     var pop=last.k!==shownKey;shownKey=last.k;
     shout='<div class="shout'+(pop?' pop':'')+'"><small>'+esc(nm(d,last.s))+'</small><b>'+esc(last.t)+'</b></div>';
   }
-  h+='<div class="table">'+seatHTML(d,pos.top,'top',myT)+seatHTML(d,pos.left,'left',myT)+'<div class="mid">'+shout+'</div>'+seatHTML(d,pos.right,'right',myT)+seatHTML(d,pos.bottom,'bottom',myT)+'</div>';
+  var side=function(p){return pos[p]===undefined?'':seatHTML(d,pos[p],p,myT)};
+  h+='<div class="table">'+side('top')+side('left')+'<div class="mid">'+shout+'</div>'+side('right')+side('bottom')+'</div>';
   h+='<p class="status">'+statusText(d)+'</p>';
   var chips='';
   if(r.bazas.length){
-    chips+=r.bazas.map(function(w,i){return '<span class="chip">Baza '+(i+1)+': '+(w===-1?'parda':(mine===null?(w===0?'Pareja A':'Pareja B'):(w===myT?'nuestra':'de ellos')))+'</span>'}).join('');
+    chips+=r.bazas.map(function(w,i){return '<span class="chip">Baza '+(i+1)+': '+(w===-1?'parda':(mine===null?(w===0?'Pareja A':'Pareja B'):(w===myT?(d.size===2?'tuya':'nuestra'):(d.size===2?'del rival':'de ellos'))))+'</span>'}).join('');
   }
   if(r.envidoRes){
     var er=r.envidoRes,t;
@@ -380,10 +386,10 @@ function gameHTML(d){
   }
   if(chips) h+='<div class="chips">'+chips+'</div>';
   if(d.status==='finished'){
-    var wn=d.winner,ws2=mine===null?teamName(d,wn):(wn===myT?'¡Ganamos!':'Ganaron ellos');
+    var wn=d.winner,ws2=mine===null?teamName(d,wn):(d.size===2?(wn===myT?'¡Ganaste!':'Ganó '+nm(d,wn)):(wn===myT?'¡Ganamos!':'Ganaron ellos'));
     h+='<div class="over"><div class="disp">'+esc(ws2)+'</div><p class="hint">'+esc(teamName(d,wn))+'</p>'+(mine!==null?btn('rematch','Revancha','primary'):'')+'</div>';
   }else if(r.over){
-    var who=mine===null?teamName(d,r.over.team):(r.over.team===myT?'Nosotros':'Ellos');
+    var who=mine===null?teamName(d,r.over.team):usThem(d,r.over.team===myT);
     h+='<div class="over"><div class="disp">'+esc(who)+' +'+r.over.pts+'</div><p class="hint">'+esc(r.over.t)+'</p>'+(mine!==null?btn('next','Repartir la siguiente','primary'):'')+'</div>';
   }
   h+=actionsHTML(d);

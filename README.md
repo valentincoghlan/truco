@@ -1,7 +1,8 @@
-# Truco para 4
+# Truco para 2 o 4
 
 Servidor Node con WebSockets. Cada jugador entra con un link, y el servidor
-le manda solo sus cartas.
+le manda solo sus cartas. Al armar la mesa se elige mano a mano (2) o en
+parejas (4).
 
 ## Probar en tu compu
     npm install
